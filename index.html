@@ -1,1 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>Flag Quiz</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🌍 Flag Quiz</h1>
+
+    <div id="quiz">
+
+        <h2 id="question">
+            Loading question...
+        </h2>
+
+        <img id="flag" src="" alt="Flag">
+
+        <div id="answers">
+            <button class="answer"></button>
+            <button class="answer"></button>
+            <button class="answer"></button>
+            <button class="answer"></button>
+        </div>
+
+        <p id="score">
+            Score: 0
+        </p>
+
+        <button id="next">
+            Next Question
+        </button>
+
+    </div>
+
+
+    <div id="finished" class="hidden">
+
+        <h2>Quiz Complete!</h2>
+
+        <p id="finalScore"></p>
+
+        <button onclick="location.reload()">
+            Play Again
+        </button>
+
+    </div>
+
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
