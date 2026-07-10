@@ -3,61 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Flag Quiz</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<div class="container">
+<div class="background"></div>
+
+<div class="menu">
 
     <h1>🌍 Flag Quiz</h1>
 
-    <div id="quiz">
+    <p class="subtitle">
+        Learn flags while competing for the highest score.
+    </p>
 
-        <h2 id="question">
-            Loading question...
-        </h2>
+    <div class="stats">
 
-        <img id="flag" src="" alt="Flag">
-
-        <div id="answers">
-            <button class="answer"></button>
-            <button class="answer"></button>
-            <button class="answer"></button>
-            <button class="answer"></button>
+        <div class="card">
+            <h2 id="questionCount">Loading...</h2>
+            <span>Questions</span>
         </div>
 
-        <p id="score">
-            Score: 0
-        </p>
+        <div class="card">
+            <h2 id="bestScore">0</h2>
+            <span>Best Score</span>
+        </div>
 
-        <button id="next">
-            Next Question
-        </button>
-
-    </div>
-
-
-    <div id="finished" class="hidden">
-
-        <h2>Quiz Complete!</h2>
-
-        <p id="finalScore"></p>
-
-        <button onclick="location.reload()">
-            Play Again
-        </button>
+        <div class="card">
+            <h2 id="bestStreak">0</h2>
+            <span>Best Streak</span>
+        </div>
 
     </div>
 
+    <button class="playButton" onclick="location.href='quiz.html'">
+        ▶ PLAY
+    </button>
+
+    <div class="menuButtons">
+
+        <button onclick="location.href='leaderboard.html'">
+            🏆 Leaderboard
+        </button>
+
+        <button onclick="location.href='add-question.html'">
+            ➕ Add Question
+        </button>
+
+        <button onclick="location.href='about.html'">
+            ℹ About
+        </button>
+
+    </div>
 
 </div>
 
+<script>
 
-<script src="script.js"></script>
+const bestScore = localStorage.getItem("bestScore") || 0;
+const bestStreak = localStorage.getItem("bestStreak") || 0;
+
+document.getElementById("bestScore").textContent = bestScore;
+document.getElementById("bestStreak").textContent = bestStreak;
+
+fetch("questions.csv")
+.then(r=>r.text())
+.then(text=>{
+
+    const rows = text.trim().split("\n");
+
+    document.getElementById("questionCount").textContent =
+        rows.length-1;
+
+});
+
+</script>
 
 </body>
 </html>
