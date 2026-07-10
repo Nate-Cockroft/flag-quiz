@@ -54,13 +54,11 @@ function parseCSV(csv){
         .split("\n");
 
 
-    const headers = lines[0]
-        .split(",");
+    return lines.slice(1)
 
+    .map(line=>{
 
-    return lines.slice(1).map(line=>{
-
-        const values = line.split(",");
+        const values = line.split("\t");
 
 
         return {
@@ -82,8 +80,9 @@ function parseCSV(csv){
         };
 
 
-    });
+    })
 
+    .filter(question => question.image);
 }
 
 
