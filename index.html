@@ -11,91 +11,75 @@
 
 <div class="background"></div>
 
-<div class="quizContainer">
+<div class="menu">
 
-    <div class="topBar">
+    <h1>🌍 Flag Quiz</h1>
 
-        <div class="score">
-            🏆 Score:
-            <span id="score">0</span>
+    <p class="subtitle">
+        Learn flags while competing for the highest score.
+    </p>
+
+    <div class="stats">
+
+        <div class="card">
+            <h2 id="questionCount">Loading...</h2>
+            <span>Questions</span>
         </div>
 
-        <div class="streak">
-            🔥 Streak:
-            <span id="streak">0</span>
+        <div class="card">
+            <h2 id="bestScore">0</h2>
+            <span>Best Score</span>
         </div>
 
-        <div class="lives" id="lives">
-            ❤️❤️❤️❤️❤️
-        </div>
-
-    </div>
-
-    <div class="flagCard">
-
-        <h2 id="question">
-            Loading question...
-        </h2>
-
-        <img
-            id="flagImage"
-            src=""
-            alt="Flag"
-        >
-
-        <div class="answers">
-
-            <button class="answer"></button>
-            <button class="answer"></button>
-            <button class="answer"></button>
-            <button class="answer"></button>
-
+        <div class="card">
+            <h2 id="bestStreak">0</h2>
+            <span>Best Streak</span>
         </div>
 
     </div>
 
-    <div class="gameOver hidden" id="gameOver">
+    <button class="playButton" onclick="location.href='quiz.html'">
+        ▶ PLAY
+    </button>
 
-        <h2>Game Over</h2>
+    <div class="menuButtons">
 
-        <p>
-            Final Score:
-            <span id="finalScore">0</span>
-        </p>
-
-        <p>
-            Best Score:
-            <span id="bestScoreEnd">0</span>
-        </p>
-
-        <p>
-            Best Streak:
-            <span id="bestStreakEnd">0</span>
-        </p>
-
-        <br>
-
-        <button
-            class="playAgain"
-            onclick="location.reload()"
-        >
-            Play Again
+        <button onclick="location.href='leaderboard.html'">
+            🏆 Leaderboard
         </button>
 
-        <br><br>
+        <button onclick="location.href='add-question.html'">
+            ➕ Add Question
+        </button>
 
-        <button
-            class="playAgain"
-            onclick="location.href='index.html'"
-        >
-            Return to Lobby
+        <button onclick="location.href='about.html'">
+            ℹ About
         </button>
 
     </div>
 
 </div>
 
-<script src="script.js"></script>
+<script>
+
+const bestScore = localStorage.getItem("bestScore") || 0;
+const bestStreak = localStorage.getItem("bestStreak") || 0;
+
+document.getElementById("bestScore").textContent = bestScore;
+document.getElementById("bestStreak").textContent = bestStreak;
+
+fetch("questions.csv")
+.then(r=>r.text())
+.then(text=>{
+
+    const rows = text.trim().split("\n");
+
+    document.getElementById("questionCount").textContent =
+        rows.length-1;
+
+});
+
+</script>
 
 </body>
 </html>
