@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flag Quiz</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="background"></div>
+
+<div class="quizContainer">
+
+    <div class="topBar">
+
+        <div class="score">
+            🏆 Score:
+            <span id="score">0</span>
+        </div>
+
+        <div class="streak">
+            🔥 Streak:
+            <span id="streak">0</span>
+        </div>
+
+        <div class="lives" id="lives">
+            ❤️❤️❤️❤️❤️
+        </div>
+
+    </div>
+
+    <div class="flagCard">
+
+        <h2 id="question">
+            Loading question...
+        </h2>
+
+        <img
+            id="flagImage"
+            src=""
+            alt="Flag"
+        >
+
+        <div class="answers">
+
+            <button class="answer"></button>
+            <button class="answer"></button>
+            <button class="answer"></button>
+            <button class="answer"></button>
+
+        </div>
+
+    </div>
+
+    <div class="gameOver hidden" id="gameOver">
+
+        <h2>Game Over</h2>
+
+        <p>
+            Final Score:
+            <span id="finalScore">0</span>
+        </p>
+
+        <p>
+            Best Score:
+            <span id="bestScoreEnd">0</span>
+        </p>
+
+        <p>
+            Best Streak:
+            <span id="bestStreakEnd">0</span>
+        </p>
+
+        <br>
+
+        <button
+            class="playAgain"
+            onclick="location.reload()"
+        >
+            Play Again
+        </button>
+
+        <br><br>
+
+        <button
+            class="playAgain"
+            onclick="location.href='index.html'"
+        >
+            Return to Lobby
+        </button>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
