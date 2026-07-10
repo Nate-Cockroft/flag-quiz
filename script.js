@@ -1,122 +1,364 @@
 let questions = [];
-let currentQuestionIndex = 0;
+
+let availableQuestions = [];
+
 let score = 0;
+let streak = 0;
+let lives = 5;
 
-const questionElement = document.getElementById("question");
-const flagElement = document.getElementById("flag");
-const answerButtons = document.querySelectorAll(".answer");
-const scoreElement = document.getElementById("score");
-const nextButton = document.getElementById("next");
+let bestScore = Number(localStorage.getItem("bestScore")) || 0;
+let bestStreak = Number(localStorage.getItem("bestStreak")) || 0;
 
-const quizSection = document.getElementById("quiz");
-const finishedSection = document.getElementById("finished");
-const finalScoreElement = document.getElementById("finalScore");
 
-async function loadQuestions() {
+const scoreText = document.getElementById("score");
+const streakText = document.getElementById("streak");
+const livesText = document.getElementById("lives");
 
-    const response = await fetch("questions.json");
-    questions = await response.json();
+const questionText = document.getElementById("question");
+const flagImage = document.getElementById("flagImage");
+
+const buttons = document.querySelectorAll(".answer");
+
+const gameOver = document.getElementById("gameOver");
+
+const finalScore = document.getElementById("finalScore");
+const bestScoreEnd = document.getElementById("bestScoreEnd");
+const bestStreakEnd = document.getElementById("bestStreakEnd");
+
+
+
+async function startGame(){
+
+    const csv = await fetch("questions.csv")
+        .then(response => response.text());
+
+
+    questions = parseCSV(csv);
 
     shuffleArray(questions);
 
-    loadQuestion();
-}
+    availableQuestions = [...questions];
 
-function shuffleArray(array) {
+    updateStats();
 
-    for (let i = array.length - 1; i > 0; i--) {
-
-        const j = Math.floor(Math.random() * (i + 1));
-
-        [array[i], array[j]] = [array[j], array[i]];
-    }
+    nextQuestion();
 
 }
 
-function loadQuestion() {
 
-    nextButton.style.display = "none";
 
-    const question = questions[currentQuestionIndex];
+function parseCSV(csv){
 
-    questionElement.textContent = question.question;
-    flagElement.src = question.image;
+    const lines = csv
+        .trim()
+        .split("\n");
 
-    let answers = [
-        question.correct,
-        ...question.wrong
-    ];
 
-    shuffleArray(answers);
+    const headers = lines[0]
+        .split(",");
 
-    answerButtons.forEach((button, index) => {
 
-        button.disabled = false;
-        button.classList.remove("correct", "wrong");
+    return lines.slice(1).map(line=>{
 
-        button.textContent = answers[index];
+        const values = line.split(",");
 
-        button.onclick = () => {
 
-            answerButtons.forEach(btn => btn.disabled = true);
+        return {
 
-            const selectedAnswer = answers[index];
+            question: values[0],
 
-            if (selectedAnswer === question.correct) {
+            image: values[1],
 
-                score++;
+            answers:[
+                values[2],
+                values[3],
+                values[4],
+                values[5]
+            ],
 
-                scoreElement.textContent =
-                    `Score: ${score}`;
+            correct:
+                Number(values[6])-1
 
-                button.classList.add("correct");
-
-            } else {
-
-                button.classList.add("wrong");
-
-                answerButtons.forEach(btn => {
-
-                    if (btn.textContent === question.correct) {
-                        btn.classList.add("correct");
-                    }
-
-                });
-
-            }
-
-            nextButton.style.display = "inline-block";
         };
+
 
     });
 
 }
 
-nextButton.addEventListener("click", () => {
 
-    currentQuestionIndex++;
 
-    if (currentQuestionIndex >= questions.length) {
+function nextQuestion(){
 
-        finishQuiz();
+    if(lives <= 0){
+        endGame();
+        return;
+    }
 
-    } else {
 
-        loadQuestion();
+
+    if(availableQuestions.length === 0){
+
+        availableQuestions = [...questions];
+
+        shuffleArray(availableQuestions);
 
     }
 
-});
 
-function finishQuiz() {
 
-    quizSection.classList.add("hidden");
+    const randomIndex =
+        Math.floor(Math.random()*availableQuestions.length);
 
-    finishedSection.classList.remove("hidden");
 
-    finalScoreElement.textContent =
-        `You scored ${score} out of ${questions.length}`;
+    const current =
+        availableQuestions.splice(randomIndex,1)[0];
+
+
+
+    questionText.textContent =
+        current.question;
+
+
+    flagImage.src =
+        current.image;
+
+
+
+    let answers =
+        current.answers.map((answer,index)=>{
+
+            return {
+
+                text:answer,
+
+                correct:
+                    index === current.correct
+
+            };
+
+        });
+
+
+
+    shuffleArray(answers);
+
+
+
+    buttons.forEach((button,index)=>{
+
+
+        button.disabled=false;
+
+        button.className="answer";
+
+
+        button.textContent =
+            answers[index].text;
+
+
+
+        button.onclick=function(){
+
+            checkAnswer(
+                button,
+                answers[index].correct
+            );
+
+        };
+
+
+    });
 
 }
 
-loadQuestions();
+
+
+function checkAnswer(button,isCorrect){
+
+
+    buttons.forEach(btn=>{
+        btn.disabled=true;
+    });
+
+
+
+    if(isCorrect){
+
+
+        score++;
+
+        streak++;
+
+
+        button.classList.add("correct");
+
+
+
+        if(streak > bestStreak){
+
+            bestStreak = streak;
+
+            localStorage.setItem(
+                "bestStreak",
+                bestStreak
+            );
+
+        }
+
+
+    }
+
+
+    else{
+
+
+        button.classList.add("wrong");
+
+
+        lives--;
+
+        streak=0;
+
+
+
+        buttons.forEach(btn=>{
+
+            if(
+                btn.textContent ===
+                getCorrectAnswer()
+            ){
+
+                btn.classList.add("correct");
+
+            }
+
+        });
+
+
+    }
+
+
+
+    if(score > bestScore){
+
+        bestScore = score;
+
+        localStorage.setItem(
+            "bestScore",
+            bestScore
+        );
+
+    }
+
+
+
+    updateStats();
+
+
+
+    setTimeout(()=>{
+
+
+        if(lives <=0){
+
+            endGame();
+
+        }
+
+        else{
+
+            nextQuestion();
+
+        }
+
+
+    },1000);
+
+
+}
+
+
+
+function getCorrectAnswer(){
+
+    return buttons[0].textContent;
+
+}
+
+
+
+function updateStats(){
+
+    scoreText.textContent =
+        score;
+
+
+    streakText.textContent =
+        streak;
+
+
+
+    livesText.textContent =
+        "❤️".repeat(lives);
+
+
+
+}
+
+
+
+function endGame(){
+
+    document.querySelector(".flagCard")
+        .classList.add("hidden");
+
+
+    gameOver.classList.remove("hidden");
+
+
+
+    finalScore.textContent =
+        score;
+
+
+    bestScoreEnd.textContent =
+        bestScore;
+
+
+    bestStreakEnd.textContent =
+        bestStreak;
+
+
+}
+
+
+
+function shuffleArray(array){
+
+    for(
+        let i=array.length-1;
+        i>0;
+        i--
+    ){
+
+        let j =
+            Math.floor(Math.random()*(i+1));
+
+
+        [
+            array[i],
+            array[j]
+        ] =
+        [
+            array[j],
+            array[i]
+        ];
+
+    }
+
+}
+
+
+
+startGame();
