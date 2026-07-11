@@ -225,5 +225,32 @@ h1{
 .menu{
     padding:25px;
 }
+    
+.lives{
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
 
+.heart{
+
+    font-size:2rem;
+
+    transition:
+        transform .25s,
+        opacity .25s;
+
+}
+
+.heart.lost{
+
+    opacity:.35;
+
+    transform:scale(.75);
+
+    filter:grayscale(100%);
+
+}
+
+    
 }
