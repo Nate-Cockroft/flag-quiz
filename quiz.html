@@ -15,6 +15,39 @@
 
     <div class="topBar">
         <div class="statsPanel">
+            <div class="powerups">
+
+    <div>
+        🎯 50/50:
+        <button onclick="useFiftyFifty()">
+            <span id="fiftyCount">0</span>
+        </button>
+    </div>
+
+
+    <div>
+        ⏭ Skip:
+        <button onclick="useSkip()">
+            <span id="skipCount">0</span>
+        </button>
+    </div>
+
+
+    <div>
+        ✨ Double:
+        <button onclick="useDoubleScore()">
+            <span id="doubleCount">0</span>
+        </button>
+    </div>
+
+
+    <progress
+        id="powerMeter"
+        value="0"
+        max="10">
+    </progress>
+
+</div>
 
     <div>
         🎯 Accuracy:
