@@ -39,7 +39,34 @@ async function startGame(){
 
     availableQuestions = [...questions];
 
-    updateStats();
+    function updateStats(){
+
+    scoreText.textContent = score;
+
+    streakText.textContent = streak;
+
+    for(let i=1;i<=5;i++){
+
+        const heart =
+            document.getElementById("heart"+i);
+
+        if(i<=lives){
+
+            heart.classList.remove("lost");
+            heart.textContent="❤️";
+
+        }
+
+        else{
+
+            heart.classList.add("lost");
+            heart.textContent="🤍";
+
+        }
+
+    }
+
+}
 
     nextQuestion();
 
