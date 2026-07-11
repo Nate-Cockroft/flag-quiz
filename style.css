@@ -279,4 +279,42 @@ h1{
 
 }    
 
+.powerups{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    margin:20px 0;
+
+}
+
+
+.powerups button{
+
+    border:none;
+
+    background:#333;
+
+    color:white;
+
+    padding:8px 12px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+}
+
+
+.powerups progress{
+
+    width:200px;
+
+}
+    
 }
