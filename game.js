@@ -40,6 +40,7 @@ function nextQuestion(){
 
 
     game.questionsSeen++;
+    increasePowerupMeter();
 
 
     game.currentQuestionStart =
