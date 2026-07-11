@@ -200,7 +200,8 @@ function correctAnswer(button){
 
 
     game.score +=
-        game.scoreMultiplier;
+    game.scoreMultiplier *
+    applyScoreMultiplier();
 
 
 
