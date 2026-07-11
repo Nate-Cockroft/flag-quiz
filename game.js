@@ -176,6 +176,7 @@ function answerQuestion(correct,button){
 
 
     updateUI();
+    updateStatsUI();
 
 
 
