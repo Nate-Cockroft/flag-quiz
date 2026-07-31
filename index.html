@@ -61,6 +61,12 @@
 </div>
 
 <script>
+if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("/sw.js");
+}
+</script>
+
+<script>
 
 const bestScore = localStorage.getItem("bestScore") || 0;
 const bestStreak = localStorage.getItem("bestStreak") || 0;

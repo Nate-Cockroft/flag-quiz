@@ -154,6 +154,12 @@
 
 </div>
 
+<script>
+if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("/sw.js");
+}
+</script>
+
 <script src="./questions.js"></script>
 <script src="./game.js"></script>
 <script src="./ui.js"></script>

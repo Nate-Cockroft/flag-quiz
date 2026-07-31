@@ -108,11 +108,12 @@ function displayQuestion(question){
     buttons.forEach(
         (button,index)=>{
 
-
             button.disabled=false;
 
             button.className="answer";
 
+            button.style.visibility =
+                "visible";
 
             button.textContent =
                 answers[index].text;

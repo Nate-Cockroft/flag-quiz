@@ -158,9 +158,7 @@ function useFiftyFifty(){
             removed < 2
         ){
 
-            button.style.visibility =
-                "hidden";
-
+            button.dataset.fiftyHidden = "true";
 
             removed++;
 
