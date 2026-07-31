@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flag Quiz</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="background"></div>
+
+<div class="menu">
+
+    <h1>🌍 Flag Quiz</h1>
+
+    <p class="subtitle">
+        Learn flags while competing for the highest score.
+    </p>
+
+    <div class="stats">
+
+        <div class="card">
+            <h2 id="questionCount">Loading...</h2>
+            <span>Questions</span>
+        </div>
+
+        <div class="card">
+            <h2 id="bestScore">0</h2>
+            <span>Best Score</span>
+        </div>
+
+        <div class="card">
+            <h2 id="bestStreak">0</h2>
+            <span>Best Streak</span>
+        </div>
+
+    </div>
+
+    <button class="playButton" onclick="location.href='quiz.html'">
+        ▶ PLAY
+    </button>
+
+    <div class="menuButtons">
+
+        <button onclick="location.href='leaderboard.html'">
+            🏆 Leaderboard
+        </button>
+
+        <button onclick="location.href='add-question.html'">
+            ➕ Add Question
+        </button>
+
+        <button onclick="location.href='about.html'">
+            ℹ About
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+const bestScore = localStorage.getItem("bestScore") || 0;
+const bestStreak = localStorage.getItem("bestStreak") || 0;
+
+document.getElementById("bestScore").textContent = bestScore;
+document.getElementById("bestStreak").textContent = bestStreak;
+
+fetch("questions.csv")
+.then(r=>r.text())
+.then(text=>{
+
+    const rows = text.trim().split("\n");
+
+    document.getElementById("questionCount").textContent =
+        rows.length-1;
+
+});
+
+</script>
+
+</body>
+</html>
