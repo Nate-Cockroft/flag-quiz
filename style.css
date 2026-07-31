@@ -328,6 +328,28 @@ body{
 
 
 
+.backButton{
+
+    padding:10px 20px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#444;
+
+    color:white;
+
+    font-size:.95rem;
+
+    cursor:pointer;
+
+    margin-bottom:10px;
+
+}
+
+
+
 .playAgain{
 
     width:100%;
@@ -386,7 +408,7 @@ body{
 
     display:grid;
 
-    grid-template-columns:1fr;
+    grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
 
     gap:8px;
 
