@@ -42,6 +42,7 @@ function renderFlags(questions) {
         `<div class="flagCard">
             <img src="${q.image}" alt="${q.question}" loading="lazy">
             <p>${q.question}</p>
+            <p class="flagCorrect">${q.answers[q.correct]}</p>
         </div>`
     ).join("");
 }
