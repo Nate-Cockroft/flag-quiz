@@ -44,10 +44,6 @@
 
     <div class="menuButtons">
 
-        <button onclick="location.href='leaderboard.html'">
-            🏆 Leaderboard
-        </button>
-
         <button onclick="location.href='browse.html'">
             🔍 Browse Flags
         </button>
@@ -60,82 +56,32 @@
             ℹ About
         </button>
 
-    </div>
-
-    <div class="leaderboardSection" id="leaderboardSection">
-
-        <h3>🏆 Top Scores</h3>
-
-        <div id="leaderboardList">
-
-            <p>Loading...</p>
-
-        </div>
-
-    </div>
-
 </div>
 
-<script>
-if("serviceWorker" in navigator){
-    navigator.serviceWorker.register("/sw.js");
-}
-</script>
+    <script>
+     if("serviceWorker" in navigator){
+         navigator.serviceWorker.register("/sw.js");
+     }
+    </script>
 
-<script src="./leaderboard.js"></script>
+    <script>
+     const bestScore = localStorage.getItem("bestScore") || 0;
+     const bestStreak = localStorage.getItem("bestStreak") || 0;
 
-<script>
+     document.getElementById("bestScore").textContent = bestScore;
+     document.getElementById("bestStreak").textContent = bestStreak;
 
-const bestScore = localStorage.getItem("bestScore") || 0;
-const bestStreak = localStorage.getItem("bestStreak") || 0;
+     fetch("questions.csv")
+     .then(r=>r.text())
+     .then(text=>{
 
-document.getElementById("bestScore").textContent = bestScore;
-document.getElementById("bestStreak").textContent = bestStreak;
+         const rows = text.trim().split("\n");
 
-fetch("questions.csv")
-.then(r=>r.text())
-.then(text=>{
+         document.getElementById("questionCount").textContent =
+             rows.length-1;
 
-    const rows = text.trim().split("\n");
+     });
+    </script>
 
-    document.getElementById("questionCount").textContent =
-        rows.length-1;
-
-});
-
-getLeaderboard(10).then(entries => {
-
-    const list = document.getElementById("leaderboardList");
-
-    if (!list) return;
-
-    if (entries.length === 0) {
-
-        list.innerHTML = "<p>No scores yet. Be the first!</p>";
-
-        return;
-
-    }
-
-    list.innerHTML = entries.map((e, i) =>
-
-        `<div class="leaderboardEntry">
-
-            <span class="rank">#${i + 1}</span>
-
-            <span class="lbName">${e.name}</span>
-
-            <span class="lbScore">${e.score}</span>
-
-            <span class="lbStreak">🔥 ${e.streak}</span>
-
-        </div>`
-
-    ).join("");
-
-});
-
-</script>
-
-</body>
-</html>
+    </body>
+    </html>

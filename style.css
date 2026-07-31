@@ -350,113 +350,13 @@ body{
 
 
 
-/* LEADERBOARD */
-
-.leaderboardSection{
-
-    margin-top:20px;
-
-    background:#1b1b1b;
-
-    border-radius:18px;
-
-    padding:15px;
-
-    text-align:center;
-
-}
-
-
-
-.leaderboardSection h3{
-
-    margin:0 0 10px;
-
-    font-size:1.1rem;
-
-}
-
-
-
-.leaderboardEntry{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    padding:8px 12px;
-
-    border-bottom:1px solid #333;
-
-    font-size:.95rem;
-
-}
-
-
-
-.leaderboardEntry:last-child{
-
-    border-bottom:none;
-
-}
-
-
-
-.rank{
-
-    color:#888;
-
-    min-width:30px;
-
-}
-
-
-
-.lbName{
-
-    flex:1;
-
-    text-align:left;
-
-    margin:0 10px;
-
-}
-
-
-
-.lbScore{
-
-    font-weight:bold;
-
-    color:#4af;
-
-    min-width:50px;
-
-    text-align:right;
-
-}
-
-
-
-.lbStreak{
-
-    color:#ff6;
-
-    min-width:50px;
-
-    text-align:right;
-
-}
-
-
-
 /* BROWSE */
 
 .searchInput{
 
     width:100%;
 
-    padding:12px;
+    padding:10px;
 
     border-radius:12px;
 
@@ -466,9 +366,9 @@ body{
 
     color:white;
 
-    font-size:1rem;
+    font-size:.95rem;
 
-    margin-bottom:15px;
+    margin-bottom:10px;
 
 }
 
@@ -488,7 +388,7 @@ body{
 
     grid-template-columns:1fr;
 
-    gap:10px;
+    gap:8px;
 
 }
 
@@ -498,9 +398,9 @@ body{
 
     background:#1b1b1b;
 
-    border-radius:12px;
+    border-radius:10px;
 
-    padding:10px;
+    padding:8px;
 
     text-align:center;
 
@@ -512,13 +412,13 @@ body{
 
     width:100%;
 
-    max-height:150px;
+    max-height:120px;
 
     object-fit:contain;
 
-    border-radius:8px;
+    border-radius:6px;
 
-    margin-bottom:8px;
+    margin-bottom:4px;
 
 }
 
@@ -526,17 +426,7 @@ body{
 
 .flagCard p{
 
-    margin:4px 0;
-
-    font-size:.9rem;
-
-}
-
-
-
-.flagAnswers{
-
-    color:#888;
+    margin:2px 0;
 
     font-size:.8rem;
 
