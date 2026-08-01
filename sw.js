@@ -32,6 +32,10 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
+    if (event.request.url.endsWith("questions.csv")) {
+        event.respondWith(fetch(event.request));
+        return;
+    }
     event.respondWith(
         caches.match(event.request).then(cached => {
             if (cached) return cached;
