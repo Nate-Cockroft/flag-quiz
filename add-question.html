@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Question - Flag Quiz</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="background"></div>
+
+<div class="quizContainer">
+
+    <button onclick="location.href='index.html'" class="backButton">
+        ← Back
+    </button>
+
+    <h1>➕ Add Question</h1>
+
+    <div id="adminSection">
+
+        <div id="passwordPrompt">
+            <p>Enter admin password to add questions:</p>
+            <input type="password" id="adminPassword" placeholder="Password" class="searchInput">
+            <button onclick="checkPassword()" class="playButton">Unlock</button>
+            <p id="passwordError" style="color:red;display:none;">Wrong password.</p>
+        </div>
+
+        <div id="questionForm" style="display:none;">
+
+            <label>Flag Image URL:</label>
+            <input type="text" id="flagUrl" placeholder="https://example.com/flag.png" class="searchInput">
+
+            <label>Question Text:</label>
+            <input type="text" id="questionText" placeholder="What country is this?" class="searchInput">
+
+            <label>Option 1:</label>
+            <input type="text" id="opt1" placeholder="Answer 1" class="searchInput">
+
+            <label>Option 2:</label>
+            <input type="text" id="opt2" placeholder="Answer 2" class="searchInput">
+
+            <label>Option 3:</label>
+            <input type="text" id="opt3" placeholder="Answer 3" class="searchInput">
+
+            <label>Option 4:</label>
+            <input type="text" id="opt4" placeholder="Answer 4" class="searchInput">
+
+            <label>Correct Answer (1-4):</label>
+            <input type="number" id="correctAnswer" min="1" max="4" placeholder="1" class="searchInput">
+
+            <button onclick="generateCsvLine()" class="playButton">Generate CSV Line</button>
+
+            <div id="csvOutput" style="display:none; margin-top:15px;">
+                <label>Copy this line to questions.csv:</label>
+                <textarea id="csvLine" rows="2" readonly style="width:100%;padding:10px;border-radius:12px;border:none;background:#333;color:white;font-size:.9rem;"></textarea>
+                <button onclick="copyCsvLine()" class="playAgain">Copy to Clipboard</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+const ADMIN_PASSWORD = "flagquiz2026";
+
+function checkPassword() {
+    const pw = document.getElementById("adminPassword").value;
+    if (pw === ADMIN_PASSWORD) {
+        document.getElementById("passwordPrompt").style.display = "none";
+        document.getElementById("questionForm").style.display = "block";
+        document.getElementById("passwordError").style.display = "none";
+    } else {
+        document.getElementById("passwordError").style.display = "block";
+    }
+}
+
+function generateCsvLine() {
+    const url = document.getElementById("flagUrl").value.trim();
+    const question = document.getElementById("questionText").value.trim();
+    const opt1 = document.getElementById("opt1").value.trim();
+    const opt2 = document.getElementById("opt2").value.trim();
+    const opt3 = document.getElementById("opt3").value.trim();
+    const opt4 = document.getElementById("opt4").value.trim();
+    const correct = document.getElementById("correctAnswer").value.trim();
+
+    if (!url || !question || !opt1 || !opt2 || !opt3 || !opt4 || !correct) {
+        alert("All fields are required.");
+        return;
+    }
+
+    const correctNum = parseInt(correct);
+    if (isNaN(correctNum) || correctNum < 1 || correctNum > 4) {
+        alert("Correct answer must be a number between 1 and 4.");
+        return;
+    }
+
+    const csvLine = question + "\t" + url + "\t" + opt1 + "\t" + opt2 + "\t" + opt3 + "\t" + opt4 + "\t" + correctNum;
+    document.getElementById("csvLine").value = csvLine;
+    document.getElementById("csvOutput").style.display = "block";
+}
+
+function copyCsvLine() {
+    const textarea = document.getElementById("csvLine");
+    textarea.select();
+    document.execCommand("copy");
+    alert("Copied to clipboard!");
+}
+</script>
+
+</body>
+</html>
