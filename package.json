@@ -1,0 +1,8 @@
+{
+  "name": "flag-quiz",
+  "version": "1.0.0",
+  "description": "Flag quiz game with AI-powered question addition",
+  "scripts": {
+    "add-question": "node add-question.js"
+  }
+}
