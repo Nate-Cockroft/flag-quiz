@@ -51,6 +51,9 @@
             <input type="number" id="correctAnswer" min="1" max="4" placeholder="1" class="searchInput">
 
             <button onclick="generateCsvLine()" class="playButton">Generate CSV Line</button>
+            <button onclick="generateWithAI()" class="playButton" style="background:#2a5;">AI Generate</button>
+
+            <div id="aiStatus" style="margin-top:10px;color:#aaa;"></div>
 
             <div id="csvOutput" style="display:none; margin-top:15px;">
                 <label>Copy this line to questions.csv:</label>
@@ -108,6 +111,74 @@ function copyCsvLine() {
     textarea.select();
     document.execCommand("copy");
     alert("Copied to clipboard!");
+}
+
+async function generateWithAI() {
+    const imageUrl = document.getElementById("flagUrl").value.trim();
+    const countryName = document.getElementById("questionText").value.trim();
+
+    if (!imageUrl) {
+        alert("Please enter the flag image URL first.");
+        return;
+    }
+
+    const status = document.getElementById("aiStatus");
+    status.textContent = "Querying LM Studio...";
+    status.style.color = "#ff6";
+
+    const payload = {
+        model: "local-model",
+        messages: [
+            {
+                role: "system",
+                content: "You are a flag quiz question generator. Given a flag image URL and a country name, generate a multiple-choice question with 4 options. Return ONLY a JSON object with these keys: question (string), options (array of 4 strings), correct_index (number 1-4). The question should be 'What country is this?' or similar. The options should include the correct country name and 3 plausible distractors."
+            },
+            {
+                role: "user",
+                content: "Flag image URL: " + imageUrl + "\nCountry name: " + countryName + "\n\nGenerate a quiz question in JSON format."
+            }
+        ],
+        temperature: 0.7,
+        max_tokens: 500
+    };
+
+    try {
+        const response = await fetch("http://localhost:1234/v1/chat/completions", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            throw new Error("HTTP " + response.status);
+        }
+
+        const data = await response.json();
+        const content = data.choices[0].message.content;
+
+        let jsonStr = content;
+        const jsonStart = content.indexOf("{");
+        const jsonEnd = content.lastIndexOf("}") + 1;
+        if (jsonStart !== -1 && jsonEnd > jsonStart) {
+            jsonStr = content.substring(jsonStart, jsonEnd);
+        }
+
+        const result = JSON.parse(jsonStr);
+
+        document.getElementById("questionText").value = result.question || "What country is this?";
+        document.getElementById("opt1").value = result.options[0] || "";
+        document.getElementById("opt2").value = result.options[1] || "";
+        document.getElementById("opt3").value = result.options[2] || "";
+        document.getElementById("opt4").value = result.options[3] || "";
+        document.getElementById("correctAnswer").value = result.correct_index || 1;
+
+        status.textContent = "AI generated! Review and save.";
+        status.style.color = "#4f4";
+
+    } catch (err) {
+        status.textContent = "AI error: " + err.message + ". Is LM Studio running on localhost:1234?";
+        status.style.color = "#f44";
+    }
 }
 </script>
 
