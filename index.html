@@ -130,10 +130,12 @@
                  if(cb.checked && idx > -1) list.splice(idx, 1);
                  if(!cb.checked && idx === -1) list.push(tag);
                  saveExcludedTags(list);
+                 label.classList.toggle("checked", cb.checked);
                  document.getElementById("questionCount").textContent = countFiltered();
              });
              label.appendChild(cb);
              label.appendChild(document.createTextNode(" " + tag));
+             label.classList.toggle("checked", cb.checked);
              container.appendChild(label);
          });
      }

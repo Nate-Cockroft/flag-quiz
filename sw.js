@@ -1,4 +1,4 @@
-const CACHE_NAME = "flag-quiz-v4";
+const CACHE_NAME = "flag-quiz-v5";
 const ASSETS = [
     "/",
     "/index.html",
@@ -30,6 +30,10 @@ self.addEventListener("activate", event => {
         caches.keys().then(keys =>
             Promise.all(
                 keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
+            )
+        ).then(() =>
+            caches.open(CACHE_NAME).then(cache =>
+                cache.delete("questions.csv")
             )
         )
     );

@@ -554,11 +554,11 @@ body{
 
     background:#222;
 
-    border:1px solid #333;
+    border:1px solid #555;
 
     border-radius:999px;
 
-    padding:4px 10px;
+    padding:6px 12px;
 
     font-size:.8rem;
 
@@ -567,6 +567,30 @@ body{
     color:#ccc;
 
     user-select:none;
+
+    transition:background .15s, border-color .15s, color .15s;
+
+}
+
+
+
+.tagFilters label:hover{
+
+    background:#2a2a2a;
+
+    border-color:#888;
+
+}
+
+
+
+.tagFilters label.checked{
+
+    background:#16331b;
+
+    border-color:#4f4;
+
+    color:#8f8;
 
 }
 
