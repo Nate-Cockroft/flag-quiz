@@ -1,10 +1,12 @@
 let allQuestions = [];
 
+let searchQuery = "";
+let selectedTag = "";
+
 window.addEventListener("DOMContentLoaded", async () => {
     try {
-        const response = await fetch("questions.csv");
-        const csv = await response.text();
-        allQuestions = parseCSV(csv);
+        allQuestions = await loadQuestionsData();
+        buildTagSelect();
         renderFlags(allQuestions);
     } catch (error) {
         document.getElementById("flagList").innerHTML =
@@ -12,21 +14,29 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-function parseCSV(csv) {
-    const lines = csv.trim().split(/\r?\n/);
-    lines.shift();
-    const questions = [];
-    lines.forEach(line => {
-        const values = line.split("\t");
-        if (!values[1]) return;
-        questions.push({
-            question: values[0],
-            image: values[1],
-            answers: [values[2], values[3], values[4], values[5]],
-            correct: Number(values[6]) - 1
-        });
+function buildTagSelect() {
+    const select = document.getElementById("tagSelect");
+    if (!select) return;
+    const tags = new Set();
+    allQuestions.forEach(q => q.tags.forEach(t => tags.add(t)));
+    const sorted = [...tags].sort();
+    select.innerHTML =
+        `<option value="">All tags</option>` +
+        sorted.map(t => `<option value="${t}">${t}</option>`).join("");
+    select.addEventListener("change", () => {
+        selectedTag = select.value;
+        renderFlags(filterQuestions());
     });
-    return questions;
+}
+
+function filterQuestions() {
+    const q = searchQuery;
+    return allQuestions.filter(question =>
+        (!q ||
+            question.question.toLowerCase().includes(q) ||
+            question.answers[question.correct].toLowerCase().includes(q)) &&
+        (!selectedTag || question.tags.includes(selectedTag))
+    );
 }
 
 function renderFlags(questions) {
@@ -38,9 +48,13 @@ function renderFlags(questions) {
         return;
     }
 
-    list.innerHTML = questions.map(q =>
-        `<div class="flagCard" onclick="toggleAnswers(this)">
+    list.innerHTML = questions.map(q => {
+        const isBorder = q.tags.includes("border");
+        const cardClass = isBorder ? "flagCard borderCard" : "flagCard";
+        const badge = isBorder ? '<span class="borderBadge">Outline</span>' : "";
+        return `<div class="${cardClass}" onclick="toggleAnswers(this)">
             <img src="${q.image}" alt="${q.question}" loading="lazy">
+            ${badge}
             <p>${q.question}</p>
             <p class="flagCorrect">${q.answers[q.correct]}</p>
             <div class="flagAnswers" hidden>
@@ -48,8 +62,8 @@ function renderFlags(questions) {
                     `<p class="${i === q.correct ? "answerCorrect" : ""}">${i === q.correct ? "✔ " : ""}${a}</p>`
                 ).join("")}
             </div>
-        </div>`
-    ).join("");
+        </div>`;
+    }).join("");
 }
 
 function toggleAnswers(card) {
@@ -60,11 +74,19 @@ function toggleAnswers(card) {
 const searchInput = document.getElementById("searchInput");
 if (searchInput) {
     searchInput.addEventListener("input", () => {
-        const query = searchInput.value.toLowerCase();
-        const filtered = allQuestions.filter(q =>
-            q.question.toLowerCase().includes(query) ||
-            q.answers.some(a => a.toLowerCase().includes(query))
-        );
-        renderFlags(filtered);
+        searchQuery = searchInput.value.toLowerCase();
+        renderFlags(filterQuestions());
+    });
+}
+
+const clearButton = document.getElementById("clearFilters");
+if (clearButton) {
+    clearButton.addEventListener("click", () => {
+        if (searchInput) searchInput.value = "";
+        const select = document.getElementById("tagSelect");
+        if (select) select.value = "";
+        searchQuery = "";
+        selectedTag = "";
+        renderFlags(allQuestions);
     });
 }

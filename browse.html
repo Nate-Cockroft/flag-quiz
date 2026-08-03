@@ -18,7 +18,17 @@
 
     <h1>🔍 Browse Flags</h1>
 
-    <input type="text" id="searchInput" placeholder="Search flags..." class="searchInput">
+    <div class="browseFilters">
+
+        <input type="text" id="searchInput" placeholder="Search flags..." class="searchInput">
+
+        <select id="tagSelect" class="searchInput">
+            <option value="">All tags</option>
+        </select>
+
+        <button id="clearFilters" class="clearButton">Clear</button>
+
+    </div>
 
     <div id="flagList" class="flagList">
 
@@ -42,6 +52,7 @@ if("serviceWorker" in navigator){
 }
 </script>
 
+<script src="./data.js"></script>
 <script src="./browse.js"></script>
 
 </body>

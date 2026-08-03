@@ -182,6 +182,26 @@ function showGameOver(){
     }
 
 
+    const missed =
+        document.getElementById(
+            "missedAnswer"
+        );
+
+
+    if(
+        missed &&
+        game.currentQuestion
+    ){
+
+        missed.textContent =
+            "Answer: " +
+            game.currentQuestion.answers[
+                game.currentQuestion.correct
+            ];
+
+    }
+
+
 }
 
 

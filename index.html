@@ -101,10 +101,6 @@
             🔍 Browse Flags
         </button>
 
-        <button onclick="location.href='about.html'">
-            ℹ About
-        </button>
-
 </div>
 
     <script>
@@ -112,6 +108,8 @@
          navigator.serviceWorker.register("/sw.js");
      }
     </script>
+
+    <script src="./data.js"></script>
 
     <script>
      const bestScore = localStorage.getItem("bestScore") || 0;
@@ -149,25 +147,24 @@
          localStorage.setItem(EXCLUDED_KEY, JSON.stringify(list));
      }
 
-     let rows = [];
+     let questions = [];
 
      function countFiltered(){
          const excluded = loadExcludedTags();
-         let n = 0;
-         for(let i = 1; i < rows.length; i++){
-             const cols = rows[i].split("\t");
-             const tags = cols[7] ? cols[7].split(",").map(t => t.trim()).filter(Boolean) : [];
-             if(tags.length === 0 || !tags.some(t => excluded.includes(t))) n++;
-         }
-         return n;
+         return questions.filter(q => {
+             const tags = q.tags;
+             return tags.length === 0 || !tags.some(t => excluded.includes(t));
+         }).length;
      }
 
-     fetch("questions.csv")
-     .then(r => r.text())
-     .then(text => {
-         rows = text.trim().split(/\r?\n/);
+     loadQuestionsData()
+     .then(list => {
+         questions = list;
          document.getElementById("questionCount").textContent = countFiltered();
          buildTagModal();
+     })
+     .catch(() => {
+         document.getElementById("questionCount").textContent = "—";
      });
 
      function buildTagModal(){

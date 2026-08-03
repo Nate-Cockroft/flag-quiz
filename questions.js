@@ -6,25 +6,9 @@
 
 async function loadQuestions(){
 
-    const response = await fetch("questions.csv");
+    const all = await loadQuestionsData();
 
-
-    if(!response.ok){
-
-        throw new Error(
-            "Could not load questions.csv"
-        );
-
-    }
-
-
-    const csv = await response.text();
-
-
-    game.questions =
-        parseQuestions(csv)
-        .filter(questionIncluded);
-
+    game.questions = all.filter(questionIncluded);
 
     if(game.questions.length === 0){
 
@@ -34,101 +18,11 @@ async function loadQuestions(){
 
     }
 
-
     resetQuestionPool();
-
 
     console.log(
         `${game.questions.length} questions loaded`
     );
-
-}
-
-
-
-
-function parseQuestions(csv){
-
-    const lines = csv
-        .trim()
-        .split(/\r?\n/);
-
-
-
-    // Remove header row
-    lines.shift();
-
-
-
-    const questions = [];
-
-
-
-    lines.forEach(line=>{
-
-
-        const values =
-            line.split("\t");
-
-
-
-        // Ignore empty rows
-
-        if(!values[1]){
-
-            return;
-
-        }
-
-
-
-        const question = {
-
-            question:
-                values[0],
-
-
-            image:
-                values[1],
-
-
-            answers:[
-
-                values[2],
-                values[3],
-                values[4],
-                values[5]
-
-            ],
-
-
-            correct:
-                Number(values[6])-1,
-
-
-            tags:
-
-                values[7] ?
-
-                values[7]
-                    .split(",")
-                    .map(tag => tag.trim())
-                    .filter(Boolean) :
-
-                []
-
-        };
-
-
-
-        questions.push(question);
-
-
-    });
-
-
-
-    return questions;
 
 }
 

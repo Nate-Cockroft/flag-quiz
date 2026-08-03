@@ -404,6 +404,60 @@ body{
 
 
 
+.browseFilters{
+
+    display:flex;
+
+    gap:8px;
+
+    align-items:center;
+
+    margin-bottom:10px;
+
+}
+
+
+
+.browseFilters .searchInput{
+
+    margin-bottom:0;
+
+    flex:1;
+
+}
+
+
+
+.clearButton{
+
+    flex-shrink:0;
+
+    padding:10px 14px;
+
+    border-radius:12px;
+
+    border:none;
+
+    background:#333;
+
+    color:white;
+
+    font-size:.9rem;
+
+    cursor:pointer;
+
+}
+
+
+
+.clearButton:hover{
+
+    background:#444;
+
+}
+
+
+
 .flagList{
 
     display:grid;
@@ -430,6 +484,14 @@ body{
 
 
 
+.flagCard.borderCard{
+
+    border:2px dashed #4a6ea8;
+
+}
+
+
+
 .flagCard img{
 
     width:100%;
@@ -451,6 +513,28 @@ body{
     margin:2px 0;
 
     font-size:.8rem;
+
+}
+
+
+
+.borderBadge{
+
+    display:inline-block;
+
+    margin-top:4px;
+
+    padding:2px 8px;
+
+    border-radius:8px;
+
+    background:#4a6ea8;
+
+    color:white;
+
+    font-size:.7rem;
+
+    font-weight:bold;
 
 }
 

@@ -1,10 +1,11 @@
-const CACHE_NAME = "flag-quiz-v7";
+const CACHE_NAME = "flag-quiz-v8";
 const ASSETS = [
     "/",
     "/index.html",
     "/quiz.html",
     "/browse.html",
     "/style.css",
+    "/data.js",
     "/game.js",
     "/questions.js",
     "/ui.js",
@@ -117,18 +118,32 @@ self.addEventListener("fetch", event => {
 
     if (request.mode === "navigate") {
         event.respondWith(
-            caches.match(request).then(cached => {
-                if (cached) return cached;
-                return fetch(request)
-                    .then(response => {
-                        const clone = response.clone();
-                        caches.open(CACHE_NAME).then(cache => {
-                            cache.put(request, clone);
-                        });
-                        return response;
-                    })
-                    .catch(() => caches.match("/index.html"));
-            })
+            fetch(request)
+                .then(response => {
+                    const clone = response.clone();
+                    caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
+                    return response;
+                })
+                .catch(() =>
+                    caches.match(request).then(cached =>
+                        cached || caches.match("/index.html")
+                    )
+                )
+        );
+        return;
+    }
+
+    // Serve fresh JS/CSS/HTML from the network, falling back to the cache
+    // so content updates propagate instead of being pinned to an old version.
+    if (url.origin === location.origin && /\.(js|css|html)$/.test(url.pathname)) {
+        event.respondWith(
+            fetch(request)
+                .then(response => {
+                    const clone = response.clone();
+                    caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
+                    return response;
+                })
+                .catch(() => caches.match(request))
         );
         return;
     }

@@ -40,7 +40,6 @@ function nextQuestion(){
 
 
     game.questionsSeen++;
-    increasePowerupMeter();
 
 
     game.currentQuestionStart =
@@ -211,6 +210,9 @@ function correctAnswer(button){
 
 
     game.correctAnswers++;
+
+
+    increasePowerupMeter();
 
 
 
