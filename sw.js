@@ -16,6 +16,10 @@ const ASSETS = [
     "/placeholder.svg"
 ];
 
+// Only pre-warm the image cache on phones/tablets to avoid
+// downloading every flag image on desktop browsers.
+let isMobile = /Mobi|Android|iPhone|iPod/i.test(navigator.userAgent);
+
 self.addEventListener("install", event => {
     event.waitUntil(
         caches.open(CACHE_NAME).then(cache =>
@@ -38,7 +42,7 @@ self.addEventListener("activate", event => {
         )
     );
     self.clients.claim();
-    warmImageCache();
+    if (isMobile) warmImageCache();
 });
 
 // ---- Offline image pre-warming ----
@@ -99,7 +103,7 @@ self.addEventListener("fetch", event => {
                             const clone = response.clone();
                             caches.open(CACHE_NAME).then(cache => {
                                 cache.put(request, clone);
-                                warmImageCache();
+                                if (isMobile) warmImageCache();
                             });
                         }
                         return response;
