@@ -746,3 +746,23 @@ What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/frieslan
 What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/gelderland_border.png	Drenthe	Groningen	Limburg	Gelderland	4	border,province,europe,modern
 What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/groningen_border.png	Groningen	Drenthe	Friesland	Gelderland	1	border,province,europe,modern
 What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/zeeland_border.png	Zeeland	North Holland	Utrecht	Limburg	1	border,province,europe,modern
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/alsace_border.png	Alsace	Lorraine	Franche-Comte	Normandy	1	border,country,europe,modern
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/brittany_border.png	Burgundy	Brittany	Cornwall	Catalonia	2	border,country,europe,modern
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/burgundy_border.png	Maryland	French Empire	Burgundy	Catalonia	3	border,country,europe,medieval
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/corsica_border.png	Corsica	Sardinia	Sicily	Malta	1	border,country,europe,modern
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/lorraine_border.png	Alsace	Burgundy	Normandy	Lorraine	4	border,province,europe,modern
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/basquecountry_border.png	Basque Country	Transamur	Cornwall	East Anglia	1	border,country,europe,modern
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/catalonia_border.png	Catalonia	Biscay	Barcelona	Toledo	1	border,country,europe,modern
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/flanders_border.png	Flanders	Belgian Kingdom	Dutch Empire	Wallonia	1	border,country,europe,modern
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/piedmont_border.png	Liguria	Lombardy	Aosta Valley	Piedmont	4	border,country,europe,19th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/liguria_border.png	Kingdom of Sardinia	Liguria	Piedmont	Grand Duchy of Tuscany	2	border,country,europe,modern
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/ryukyuan_border.png	Hokkaido	Ryukyuan	Honshu	Kyushu	2	border,province,asia,20th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/newengland_border.png	Ontario	New England	Nova Scotia	NewFoundLand	2	border,country,north-america,modern
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/bohemia_border.png	Bohemia	Flanders	Walonia	Friesland	1	border,country,europe,medieval
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/baden_border.png	Baden	Wurrtemberg	Bavaria	Brandenburg	1	border,country,europe,19th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/canaryislands_border.png	Canary Islands	Cabo Verde	Marshall Islands	Micronesia	1	border,country,europe,modern
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/siberia_border.png	Russia	Archangelsk	Siberia	Grand Principality of Moscow	3	border,country,asia,modern
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/persia_border.png	Iraq	Iran	Azerbaijan	Persia	4	border,country,asia,modern
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/burma_border.png	Samoa	Burma	Myanmar	National Republic of China	2	border,country,asia,modern
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/abyssinia_border.png	Mesopotamia	Abyssinia	Fertile Crescent	Persia	2	border,country,africa,20th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/peoplessocialistrepublicofmongolia_border.png	Albania	Peoples Socialist Republic of Albania	Peoples Socialist Republic of Mongolia	Mongolia	3	border,country,asia,20th-century
