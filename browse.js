@@ -39,12 +39,22 @@ function renderFlags(questions) {
     }
 
     list.innerHTML = questions.map(q =>
-        `<div class="flagCard">
+        `<div class="flagCard" onclick="toggleAnswers(this)">
             <img src="${q.image}" alt="${q.question}" loading="lazy">
             <p>${q.question}</p>
             <p class="flagCorrect">${q.answers[q.correct]}</p>
+            <div class="flagAnswers" hidden>
+                ${q.answers.map((a, i) =>
+                    `<p class="${i === q.correct ? "answerCorrect" : ""}">${i === q.correct ? "✔ " : ""}${a}</p>`
+                ).join("")}
+            </div>
         </div>`
     ).join("");
+}
+
+function toggleAnswers(card) {
+    const answers = card.querySelector(".flagAnswers");
+    if (answers) answers.hidden = !answers.hidden;
 }
 
 const searchInput = document.getElementById("searchInput");

@@ -468,6 +468,56 @@ body{
 
 
 
+.flagCard{
+
+    cursor:pointer;
+
+}
+
+
+
+.flagAnswers{
+
+    margin-top:4px;
+
+    border-top:1px solid #333;
+
+    padding-top:4px;
+
+}
+
+
+
+.flagAnswers p{
+
+    margin:2px 0;
+
+    font-size:.8rem;
+
+    color:#ccc;
+
+}
+
+
+
+.flagAnswers .answerCorrect{
+
+    color:#4f4;
+
+    font-weight:bold;
+
+}
+
+
+
+.flagAnswers[hidden]{
+
+    display:none;
+
+}
+
+
+
 /* DESKTOP ENHANCEMENT */
 
 
