@@ -42,8 +42,57 @@
         ▶ PLAY
     </button>
 
-    <div class="tagFilters" id="tagFilters">
-        <span class="tagFiltersTitle">Include:</span>
+    <div class="tagFilterWrap">
+
+        <button
+            class="tagButton"
+            id="tagButton"
+            onclick="toggleTagModal()"
+        >
+            🏷 Filter Tags
+        </button>
+
+        <div
+            class="tagModal"
+            id="tagModal"
+            hidden
+        >
+
+            <div class="tagModalCard">
+
+                <div class="tagModalHeader">
+
+                    <span>Filter Flags</span>
+
+                    <button
+                        class="tagModalClose"
+                        onclick="closeTagModal()"
+                    >
+                        ✕
+                    </button>
+
+                </div>
+
+                <div
+                    class="tagModalBody"
+                    id="tagModalBody"
+                ></div>
+
+                <div class="tagModalFooter">
+
+                    <button
+                        class="tagModalReset"
+                        onclick="resetTagFilters()"
+                    >
+                        Reset
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
     <div class="menuButtons">
@@ -72,6 +121,21 @@
      document.getElementById("bestStreak").textContent = bestStreak;
 
      const EXCLUDED_KEY = "excludedTags";
+
+     const TAG_GROUPS = [
+         {
+             name: "Type",
+             tags: ["flag", "country", "city", "province", "state", "island", "territory", "alliance", "border", "other"]
+         },
+         {
+             name: "Continent",
+             tags: ["africa", "antarctica", "asia", "europe", "north-america", "oceania", "south-america"]
+         },
+         {
+             name: "Time period",
+             tags: ["medieval", "14th-century", "17th-century", "18th-century", "19th-century", "20th-century", "modern"]
+         }
+     ];
 
      function loadExcludedTags(){
          try {
@@ -103,41 +167,56 @@
      .then(text => {
          rows = text.trim().split(/\r?\n/);
          document.getElementById("questionCount").textContent = countFiltered();
-         buildTagFilters();
+         buildTagModal();
      });
 
-     function buildTagFilters(){
-         const container = document.getElementById("tagFilters");
-         const tagList = [];
-         for(let i = 1; i < rows.length; i++){
-             const cols = rows[i].split("\t");
-             if(!cols[7]) continue;
-             cols[7].split(",").forEach(t => {
-                 t = t.trim();
-                 if(t && !tagList.includes(t)) tagList.push(t);
-             });
-         }
-         tagList.sort();
+     function buildTagModal(){
+         const body = document.getElementById("tagModalBody");
          const excluded = loadExcludedTags();
-         tagList.forEach(tag => {
-             const label = document.createElement("label");
-             const cb = document.createElement("input");
-             cb.type = "checkbox";
-             cb.checked = !excluded.includes(tag);
-             cb.addEventListener("change", () => {
-                 const list = loadExcludedTags();
-                 const idx = list.indexOf(tag);
-                 if(cb.checked && idx > -1) list.splice(idx, 1);
-                 if(!cb.checked && idx === -1) list.push(tag);
-                 saveExcludedTags(list);
+         body.innerHTML = "";
+         TAG_GROUPS.forEach(group => {
+             const section = document.createElement("div");
+             section.className = "tagGroup";
+             const title = document.createElement("div");
+             title.className = "tagGroupTitle";
+             title.textContent = group.name;
+             section.appendChild(title);
+             group.tags.forEach(tag => {
+                 const label = document.createElement("label");
+                 const cb = document.createElement("input");
+                 cb.type = "checkbox";
+                 cb.checked = !excluded.includes(tag);
+                 cb.addEventListener("change", () => {
+                     const list = loadExcludedTags();
+                     const idx = list.indexOf(tag);
+                     if(cb.checked && idx > -1) list.splice(idx, 1);
+                     if(!cb.checked && idx === -1) list.push(tag);
+                     saveExcludedTags(list);
+                     label.classList.toggle("checked", cb.checked);
+                     document.getElementById("questionCount").textContent = countFiltered();
+                 });
+                 label.appendChild(cb);
+                 label.appendChild(document.createTextNode(" " + tag));
                  label.classList.toggle("checked", cb.checked);
-                 document.getElementById("questionCount").textContent = countFiltered();
+                 section.appendChild(label);
              });
-             label.appendChild(cb);
-             label.appendChild(document.createTextNode(" " + tag));
-             label.classList.toggle("checked", cb.checked);
-             container.appendChild(label);
+             body.appendChild(section);
          });
+     }
+
+     function toggleTagModal(){
+         const modal = document.getElementById("tagModal");
+         modal.hidden = !modal.hidden;
+     }
+
+     function closeTagModal(){
+         document.getElementById("tagModal").hidden = true;
+     }
+
+     function resetTagFilters(){
+         saveExcludedTags([]);
+         buildTagModal();
+         document.getElementById("questionCount").textContent = countFiltered();
      }
     </script>
 
