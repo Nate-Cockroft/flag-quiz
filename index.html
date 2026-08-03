@@ -42,6 +42,10 @@
         ▶ PLAY
     </button>
 
+    <div class="tagFilters" id="tagFilters">
+        <span class="tagFiltersTitle">Include:</span>
+    </div>
+
     <div class="menuButtons">
 
         <button onclick="location.href='browse.html'">
@@ -67,16 +71,72 @@
      document.getElementById("bestScore").textContent = bestScore;
      document.getElementById("bestStreak").textContent = bestStreak;
 
+     const EXCLUDED_KEY = "excludedTags";
+
+     function loadExcludedTags(){
+         try {
+             return JSON.parse(localStorage.getItem(EXCLUDED_KEY)) || [];
+         } catch(error) {
+             return [];
+         }
+     }
+
+     function saveExcludedTags(list){
+         localStorage.setItem(EXCLUDED_KEY, JSON.stringify(list));
+     }
+
+     let rows = [];
+
+     function countFiltered(){
+         const excluded = loadExcludedTags();
+         let n = 0;
+         for(let i = 1; i < rows.length; i++){
+             const cols = rows[i].split("\t");
+             const tags = cols[7] ? cols[7].split(",").map(t => t.trim()).filter(Boolean) : [];
+             if(tags.length === 0 || !tags.some(t => excluded.includes(t))) n++;
+         }
+         return n;
+     }
+
      fetch("questions.csv")
-     .then(r=>r.text())
-     .then(text=>{
-
-         const rows = text.trim().split("\n");
-
-         document.getElementById("questionCount").textContent =
-             rows.length-1;
-
+     .then(r => r.text())
+     .then(text => {
+         rows = text.trim().split(/\r?\n/);
+         document.getElementById("questionCount").textContent = countFiltered();
+         buildTagFilters();
      });
+
+     function buildTagFilters(){
+         const container = document.getElementById("tagFilters");
+         const tagList = [];
+         for(let i = 1; i < rows.length; i++){
+             const cols = rows[i].split("\t");
+             if(!cols[7]) continue;
+             cols[7].split(",").forEach(t => {
+                 t = t.trim();
+                 if(t && !tagList.includes(t)) tagList.push(t);
+             });
+         }
+         tagList.sort();
+         const excluded = loadExcludedTags();
+         tagList.forEach(tag => {
+             const label = document.createElement("label");
+             const cb = document.createElement("input");
+             cb.type = "checkbox";
+             cb.checked = !excluded.includes(tag);
+             cb.addEventListener("change", () => {
+                 const list = loadExcludedTags();
+                 const idx = list.indexOf(tag);
+                 if(cb.checked && idx > -1) list.splice(idx, 1);
+                 if(!cb.checked && idx === -1) list.push(tag);
+                 saveExcludedTags(list);
+                 document.getElementById("questionCount").textContent = countFiltered();
+             });
+             label.appendChild(cb);
+             label.appendChild(document.createTextNode(" " + tag));
+             container.appendChild(label);
+         });
+     }
     </script>
 
     </body>

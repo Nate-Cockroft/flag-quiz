@@ -21,13 +21,15 @@ async function loadQuestions(){
     const csv = await response.text();
 
 
-    game.questions = parseQuestions(csv);
+    game.questions =
+        parseQuestions(csv)
+        .filter(questionIncluded);
 
 
     if(game.questions.length === 0){
 
         throw new Error(
-            "No questions found"
+            "No questions match your selected tags"
         );
 
     }
@@ -101,7 +103,19 @@ function parseQuestions(csv){
 
 
             correct:
-                Number(values[6])-1
+                Number(values[6])-1,
+
+
+            tags:
+
+                values[7] ?
+
+                values[7]
+                    .split(",")
+                    .map(tag => tag.trim())
+                    .filter(Boolean) :
+
+                []
 
         };
 
@@ -115,6 +129,52 @@ function parseQuestions(csv){
 
 
     return questions;
+
+}
+
+
+
+
+function loadExcludedTags(){
+
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem("excludedTags")
+        ) || [];
+
+    }
+
+    catch(error){
+
+        return [];
+
+    }
+
+}
+
+
+
+
+function questionIncluded(question){
+
+
+    if(
+        question.tags.length === 0
+    ){
+
+        return true;
+
+    }
+
+
+    const excluded = loadExcludedTags();
+
+
+    return !question.tags.some(
+        tag => excluded.includes(tag)
+    );
 
 }
 

@@ -518,6 +518,72 @@ body{
 
 
 
+.tagFilters{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+
+    justify-content:center;
+
+    align-items:center;
+
+    margin:12px auto 0;
+
+    max-width:520px;
+
+}
+
+
+
+.tagFiltersTitle{
+
+    font-size:.85rem;
+
+    color:#888;
+
+    margin-right:4px;
+
+}
+
+
+
+.tagFilters label{
+
+    background:#222;
+
+    border:1px solid #333;
+
+    border-radius:999px;
+
+    padding:4px 10px;
+
+    font-size:.8rem;
+
+    cursor:pointer;
+
+    color:#ccc;
+
+    user-select:none;
+
+}
+
+
+
+.tagFilters input{
+
+    margin-right:4px;
+
+    accent-color:#4f4;
+
+    cursor:pointer;
+
+}
+
+
+
 /* DESKTOP ENHANCEMENT */
 
 

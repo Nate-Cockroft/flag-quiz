@@ -53,7 +53,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
         console.error(error);
 
-        alert("Failed to load questions.csv");
+        alert(error.message);
 
     }
 
