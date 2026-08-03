@@ -525,7 +525,6 @@ What country is this?	https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/
 What country is this?	https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Flag_of_Vend%C3%A9e.svg/960px-Flag_of_Vend%C3%A9e.svg.png	Brittany	Normandy	Provence	Vendée	4	flag,country,europe,modern
 What country is this?	https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Flag_of_the_Republic_of_Pisa.svg/960px-Flag_of_the_Republic_of_Pisa.svg.png	Republic of Genoa	Republic of Venice	Republic of Pisa	Republic of Florence	3	flag,country,europe,medieval
 What country is this?	https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Genoa.svg/960px-Flag_of_Genoa.svg.png	England	Republic of Genoa	Republic of Pisa	Republic of Venice	2	flag,country,europe,medieval
-
 What country is this?	https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Flag_of_Antigua_and_Barbuda.svg/960px-Flag_of_Antigua_and_Barbuda.svg.png	Antigua and Barbuda	Bahamas	Barbados	Saint Kitts and Nevis	1	flag,country,north-america,modern
 What country is this?	https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Flag_of_Armenia.svg/960px-Flag_of_Armenia.svg.png	Georgia	Artsakh	Azerbaijan	Armenia	4	flag,country,asia,modern
 What country is this?	https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Flag_of_the_Bahamas.svg/960px-Flag_of_the_Bahamas.svg.png	Bahamas	Jamaica	Barbados	Saint Vincent and the Grenadines	1	flag,country,north-america,modern
@@ -766,3 +765,23 @@ What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/persia_b
 What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/burma_border.png	Samoa	Burma	Myanmar	National Republic of China	2	border,country,asia,modern
 What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/abyssinia_border.png	Mesopotamia	Abyssinia	Fertile Crescent	Persia	2	border,country,africa,20th-century
 What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/peoplessocialistrepublicofmongolia_border.png	Albania	Peoples Socialist Republic of Albania	Peoples Socialist Republic of Mongolia	Mongolia	3	border,country,asia,20th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/sovietukraine_border.png	Soviet Ukraine	Soviet Baltics	Soviet Kazakhstan	Soviet Belarus	1	border,country,europe,20th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/kingdomofserbia_border.png	Serbia	Yugoslavia	Hungarian Empire	Kingdom of Serbia	4	border,country,europe,19th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/shandongclique_border.png	Shandong Clique	Yunnan Clique	Guanxi Clique	Shanxi Clique	1	border,country,asia,20th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/shanxiclique_border.png	Fengtian clique	Shanxi Clique	Ma clique	Xinjiang clique	2	border,country,asia,20th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/socialistyugoslavia_border.png	Socialist Yugoslavia	Yugoslavia	Serbia	Communist Albania	1	border,country,europe,20th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/scotland_border.png	Scotland	St James	Berkshire	Firmshire	1	border,country,europe,modern
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/socialistrepublicofromania_border.png	Socialist Republic of Romania	Republic of Romania	Legionary Romania	Republic of Chad	1	border,country,europe,20th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/republicanspain_border.png	Spanish Republic	Spain	Republican Spain	Socialist Republic of Romania	3	border,country,europe,20th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/polishkingdom_border.png	Polish Hussars	Red Ruthenia	Polish Kingdom	Kingdom of Ruthenia	3	border,country,europe,19th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/kingdomofsardinia_border.png	Corsica	Kingdom of Italy	Sicily	Kingdom of Sardinia	4	border,country,europe,19th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/saarprotectorate_border.png	Rhine Republic	Iceland	Bavaria	Saar Protectorate	4	border,country,europe,20th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/russiansovietfederativesocialistrepublic_border.png	Russian Soviet Federative Socialist Republic	Moldovan Soviet Federative Socialist Republic	Ukranian Soviet Federative Socialist Republic	Kazakhstan Soviet Federative Socialist Republic	1	border,country,europe,20th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/portugesekingdom_border.png	Finnish Kingdom	Portugese Kingdom	Spanish Kingdom	Peru-Bolivian Commonwealth	2	border,country,europe,19th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/peoplessocialistrepublicofalbania_border.png	Albania	People's Socialist Republic of Albania	Peoples Socialist Republic of Mongolia	Mongolia	2	border,country,europe,20th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/austrianempire_border.png	German Empire	Bavaria	Austria-Hungary	Austrian Empire	4	border,country,europe,19th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/ottomanempire_border.png	Turkey	Seljuk Empire	Ottoman Empire	Turchia	3	border,country,europe,19th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/dutchempire_border.png	Netherlands	Dutch Republic	Second Dutch Republic	Dutch Empire	4	border,country,europe,17th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/muscatandoman_border.png	Muscat and Oman	Omani Sultanate	Yemeni Sultanate	Yemen Republic	1	border,country,asia,modern
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/occupiedindonesia_border.png	Peuto Rico	Occupied Indonesia	Empire of Japan	Libya	2	border,country,asia,20th-century
+What country is this?	https://nate-cockroft.github.io/flag-quiz/borders/occupiedjapan_border.png	Soviet Czechoslovakia	Occupied Japan	Czechia	Occupied Philippines	2	border,country,asia,20th-century
