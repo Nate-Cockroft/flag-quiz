@@ -3,7 +3,6 @@
 // Question Loader
 // ========================================
 
-
 async function loadQuestions(){
 
     const all = await loadQuestionsData();
@@ -23,36 +22,6 @@ async function loadQuestions(){
     console.log(
         `${game.questions.length} questions loaded`
     );
-
-}
-
-
-
-
-const DEFAULT_EXCLUDED_TAGS = ["border"];
-
-
-
-function loadExcludedTags(){
-
-
-    try {
-
-        const val = JSON.parse(
-            localStorage.getItem("excludedTags")
-        );
-
-        return Array.isArray(val)
-            ? val
-            : [...DEFAULT_EXCLUDED_TAGS];
-
-    }
-
-    catch(error){
-
-        return [...DEFAULT_EXCLUDED_TAGS];
-
-    }
 
 }
 
@@ -112,37 +81,5 @@ function getNextQuestion(){
 
 
     return game.remainingQuestions.pop();
-
-}
-
-
-
-
-function shuffleArray(array){
-
-
-    for(
-        let i=array.length-1;
-        i>0;
-        i--
-    ){
-
-        const j =
-            Math.floor(
-                Math.random()*(i+1)
-            );
-
-
-        [
-            array[i],
-            array[j]
-        ] =
-        [
-            array[j],
-            array[i]
-        ];
-
-    }
-
 
 }

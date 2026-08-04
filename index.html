@@ -118,8 +118,6 @@
      document.getElementById("bestScore").textContent = bestScore;
      document.getElementById("bestStreak").textContent = bestStreak;
 
-     const EXCLUDED_KEY = "excludedTags";
-
      const TAG_GROUPS = [
          {
              name: "Type",
@@ -134,21 +132,6 @@
              tags: ["medieval", "14th-century", "17th-century", "18th-century", "19th-century", "20th-century", "modern"]
          }
      ];
-
-     const DEFAULT_EXCLUDED = ["border"];
-
-     function loadExcludedTags(){
-         try {
-             const val = JSON.parse(localStorage.getItem(EXCLUDED_KEY));
-             return Array.isArray(val) ? val : [...DEFAULT_EXCLUDED];
-         } catch(error) {
-             return [...DEFAULT_EXCLUDED];
-         }
-     }
-
-     function saveExcludedTags(list){
-         localStorage.setItem(EXCLUDED_KEY, JSON.stringify(list));
-     }
 
      let questions = [];
 
@@ -214,7 +197,7 @@
      }
 
      function resetTagFilters(){
-         saveExcludedTags([...DEFAULT_EXCLUDED]);
+         saveExcludedTags([...DEFAULT_EXCLUDED_TAGS]);
          buildTagModal();
          document.getElementById("questionCount").textContent = countFiltered();
      }

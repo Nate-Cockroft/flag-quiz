@@ -5,6 +5,30 @@
 
 const QUESTIONS_CACHE_KEY = "flagquiz.questions.v1";
 const CSV_URL = "questions.csv";
+const EXCLUDED_KEY = "excludedTags";
+const DEFAULT_EXCLUDED_TAGS = ["border"];
+
+// Returns which tags are filtered out of the quiz. Borders are excluded
+// unless the user explicitly enables them via the tag filter.
+function loadExcludedTags() {
+    try {
+        const val = JSON.parse(localStorage.getItem(EXCLUDED_KEY));
+        return Array.isArray(val) ? val : [...DEFAULT_EXCLUDED_TAGS];
+    } catch (error) {
+        return [...DEFAULT_EXCLUDED_TAGS];
+    }
+}
+
+function saveExcludedTags(list) {
+    localStorage.setItem(EXCLUDED_KEY, JSON.stringify(list));
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
 
 function parseQuestionsCSV(csv) {
     const lines = csv.trim().split(/\r?\n/);
