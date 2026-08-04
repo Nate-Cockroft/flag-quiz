@@ -63,61 +63,32 @@ function giveRandomPowerup(){
 
 
 
-    const reward =
+    for(
+        let i = 0;
+        i < 3;
+        i++
+    ){
 
-        rewards[
-            Math.floor(
-                Math.random() *
-                rewards.length
-            )
-        ];
+        const reward =
+
+            rewards[
+                Math.floor(
+                    Math.random() *
+                    rewards.length
+                )
+            ];
 
 
 
-    game.powerups[reward]++;
+        game.powerups[reward]++;
 
-
-
-    alert(
-        "🎁 You received: "
-        +
-        formatPowerupName(reward)
-    );
+    }
 
 
 
     updatePowerupUI();
 
 }
-
-
-
-
-function formatPowerupName(powerup){
-
-
-    const names = {
-
-
-        fiftyFifty:
-            "50/50",
-
-
-        skip:
-            "Skip",
-
-
-        doubleScore:
-            "Double Score"
-
-
-    };
-
-
-    return names[powerup];
-
-}
-
 
 
 
