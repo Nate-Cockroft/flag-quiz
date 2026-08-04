@@ -29,20 +29,28 @@ async function loadQuestions(){
 
 
 
+const DEFAULT_EXCLUDED_TAGS = ["border"];
+
+
+
 function loadExcludedTags(){
 
 
     try {
 
-        return JSON.parse(
+        const val = JSON.parse(
             localStorage.getItem("excludedTags")
-        ) || [];
+        );
+
+        return Array.isArray(val)
+            ? val
+            : [...DEFAULT_EXCLUDED_TAGS];
 
     }
 
     catch(error){
 
-        return [];
+        return [...DEFAULT_EXCLUDED_TAGS];
 
     }
 

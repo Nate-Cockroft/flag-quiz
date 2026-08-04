@@ -135,11 +135,14 @@
          }
      ];
 
+     const DEFAULT_EXCLUDED = ["border"];
+
      function loadExcludedTags(){
          try {
-             return JSON.parse(localStorage.getItem(EXCLUDED_KEY)) || [];
+             const val = JSON.parse(localStorage.getItem(EXCLUDED_KEY));
+             return Array.isArray(val) ? val : [...DEFAULT_EXCLUDED];
          } catch(error) {
-             return [];
+             return [...DEFAULT_EXCLUDED];
          }
      }
 
@@ -211,7 +214,7 @@
      }
 
      function resetTagFilters(){
-         saveExcludedTags([]);
+         saveExcludedTags([...DEFAULT_EXCLUDED]);
          buildTagModal();
          document.getElementById("questionCount").textContent = countFiltered();
      }
