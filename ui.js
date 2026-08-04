@@ -95,18 +95,91 @@ function updateUI(){
 
 function updateLives(){
 
-    if(
-        game.mode === MODES.casual ||
-        game.mode === MODES.twoPlayer
-    ){
+    if(game.mode === MODES.casual){
 
         const livesEl =
             document.querySelector(".lives");
 
         if(livesEl){
 
-            livesEl.style.display =
-                "none";
+            livesEl.style.display = "none";
+
+            livesEl.classList.remove(
+                "twoPlayerLives"
+            );
+
+        }
+
+        return;
+
+    }
+
+    if(game.mode === MODES.twoPlayer){
+
+        const livesEl =
+            document.querySelector(".lives");
+
+        if(livesEl){
+
+            livesEl.style.display = "";
+
+            livesEl.classList.add(
+                "twoPlayerLives"
+            );
+
+            livesEl.innerHTML = "";
+
+            game.players.forEach(
+                (player, playerIndex) => {
+
+                    const row =
+                        document.createElement("div");
+
+                    row.className =
+                        "livesRow" +
+                        (playerIndex ===
+                            game.currentPlayer
+                                ? " active"
+                                : "");
+
+                    const label =
+                        document.createElement("span");
+
+                    label.className =
+                        "livesLabel " +
+                        (playerIndex === 0
+                            ? "p1"
+                            : "p2");
+
+                    label.textContent =
+                        player.name;
+
+                    row.appendChild(label);
+
+                    for(
+                        let i = 1;
+                        i <= game.maxLives;
+                        i++
+                    ){
+
+                        const heart =
+                            document.createElement("span");
+
+                        heart.className = "heart";
+
+                        heart.textContent =
+                            i <= player.lives
+                                ? "❤️"
+                                : "🤍";
+
+                        row.appendChild(heart);
+
+                    }
+
+                    livesEl.appendChild(row);
+
+                }
+            );
 
         }
 
@@ -120,6 +193,10 @@ function updateLives(){
     if(livesEl){
 
         livesEl.style.display = "";
+
+        livesEl.classList.remove(
+            "twoPlayerLives"
+        );
 
     }
 

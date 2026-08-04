@@ -129,6 +129,68 @@ body{
 
 
 
+.lives.twoPlayerLives{
+
+    flex-direction:column;
+
+    gap:4px;
+
+}
+
+
+
+.livesRow{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:2px;
+
+    opacity:.4;
+
+    transition:.2s;
+
+}
+
+
+
+.livesRow.active{
+
+    opacity:1;
+
+}
+
+
+
+.livesLabel{
+
+    font-size:.8rem;
+
+    font-weight:bold;
+
+    margin-right:6px;
+
+}
+
+
+
+.livesLabel.p1{
+
+    color:#2e7dff;
+
+}
+
+
+
+.livesLabel.p2{
+
+    color:#ff8f2e;
+
+}
+
+
+
 .heart{
 
     font-size:1.5rem;

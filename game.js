@@ -25,6 +25,7 @@ function setupGame(){
         player.score = 0;
         player.streak = 0;
         player.bestStreak = 0;
+        player.lives = game.maxLives;
     });
 
     if(game.mode === MODES.casual){
@@ -50,7 +51,21 @@ function setupGame(){
 
 function nextQuestion(){
 
-    if(
+    if(game.mode === MODES.twoPlayer){
+
+        if(
+            game.players[game.currentPlayer].lives
+            <= 0
+        ){
+
+            endGame();
+
+            return;
+
+        }
+
+    }
+    else if(
         game.mode !== MODES.casual &&
         game.lives <= 0
     ){
@@ -310,7 +325,8 @@ function answerQuestion(correct,button){
 
         if(
             game.mode === MODES.twoPlayer &&
-            game.lives > 0
+            game.players[game.currentPlayer].lives
+            > 0
         ){
 
             game.currentPlayer =
@@ -403,9 +419,10 @@ function wrongAnswer(button){
 
         player.streak = 0;
 
-    }
+        player.lives--;
 
-    if(game.mode !== MODES.casual){
+    }
+    else if(game.mode !== MODES.casual){
 
         game.lives--;
 

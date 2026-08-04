@@ -30,8 +30,8 @@ const game = {
     maxQuestions: null,
 
     players: [
-        { name: "Player 1", score: 0, streak: 0, bestStreak: 0 },
-        { name: "Player 2", score: 0, streak: 0, bestStreak: 0 }
+        { name: "Player 1", score: 0, streak: 0, bestStreak: 0, lives: 5 },
+        { name: "Player 2", score: 0, streak: 0, bestStreak: 0, lives: 5 }
     ],
     currentPlayer: 0,
 
