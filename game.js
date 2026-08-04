@@ -187,6 +187,7 @@ function displayQuestion(question){
                     : "answer";
 
             button.dataset.correct =
+                index < answers.length &&
                 answers[index].correct
                     ? "true"
                     : "false";
