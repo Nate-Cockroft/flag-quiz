@@ -127,6 +127,66 @@ body{
 
 
 
+.modeBadge{
+
+    font-size:.8rem;
+
+    background:#2a2a3a;
+
+    padding:6px 12px;
+
+    border-radius:20px;
+
+    color:#9ad1ff;
+
+}
+
+
+
+.endGameBtn{
+
+    font-size:.85rem;
+
+    background:#5a2a2a;
+
+    padding:6px 12px;
+
+    border-radius:12px;
+
+    border:none;
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+
+
+.turnIndicator{
+
+    display:none;
+
+    font-size:1.1rem;
+
+    font-weight:bold;
+
+    color:#ffd75e;
+
+    margin:8px 0;
+
+}
+
+
+
+.turnIndicator.visible{
+
+    display:block;
+
+}
+
+
+
 /* QUESTION CARD */
 
 
@@ -165,6 +225,14 @@ body{
     border-radius:12px;
 
     margin:10px 0;
+
+}
+
+
+
+.zoomable{
+
+    cursor:zoom-in;
 
 }
 
@@ -232,6 +300,40 @@ body{
 .answer.wrong{
 
     background:red;
+
+}
+
+
+
+.answerExtra{
+
+    display:none;
+
+}
+
+
+
+.answerFlag{
+
+    width:100%;
+
+    max-height:36px;
+
+    object-fit:contain;
+
+    border-radius:6px;
+
+    pointer-events:none;
+
+    cursor:zoom-in;
+
+}
+
+
+
+.answersHard .answerExtra{
+
+    display:block;
 
 }
 
@@ -365,6 +467,68 @@ body{
     color:white;
 
     font-size:1.1rem;
+
+}
+
+
+
+.missedFlag{
+
+    display:inline-block;
+
+    width:40px;
+
+    vertical-align:middle;
+
+    margin-left:8px;
+
+    border-radius:4px;
+
+}
+
+
+
+.zoomOverlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.9);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    z-index:1000;
+
+    cursor:zoom-out;
+
+}
+
+
+
+.zoomOverlay img{
+
+    max-width:92%;
+
+    max-height:92%;
+
+    object-fit:contain;
+
+    border-radius:8px;
+
+    box-shadow:0 0 40px rgba(0,0,0,.8);
+
+}
+
+
+
+.zoomOverlay.hidden{
+
+    display:none;
 
 }
 
@@ -902,6 +1066,312 @@ body{
 
 
 
+/* MENU */
+
+.menu{
+
+    width:100%;
+
+    max-width:600px;
+
+    margin:auto;
+
+    padding:20px 12px;
+
+    text-align:center;
+
+}
+
+
+
+.menu h1{
+
+    font-size:2rem;
+
+    margin:10px 0 4px;
+
+}
+
+
+
+.subtitle{
+
+    color:#aaa;
+
+    margin:0 0 20px;
+
+}
+
+
+
+.stats{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:10px;
+
+    margin:15px 0;
+
+}
+
+
+
+.menu .card{
+
+    background:#1b1b1b;
+
+    border-radius:14px;
+
+    padding:14px 8px;
+
+}
+
+
+
+.menu .card h2{
+
+    margin:0;
+
+    font-size:1.3rem;
+
+}
+
+
+
+.menu .card span{
+
+    font-size:.8rem;
+
+    color:#aaa;
+
+}
+
+
+
+.playButton{
+
+    width:100%;
+
+    max-width:320px;
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:#4caf50;
+
+    color:white;
+
+    font-size:1.2rem;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.15s;
+
+}
+
+
+
+.playButton:active{
+
+    transform:scale(.97);
+
+}
+
+
+
+.modeSelector{
+
+    margin-top:20px;
+
+    text-align:left;
+
+}
+
+
+
+.modeSelectorHeader{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    font-size:1rem;
+
+    font-weight:bold;
+
+    color:#ddd;
+
+    margin-bottom:10px;
+
+    padding:0 4px;
+
+}
+
+
+
+#modeCount{
+
+    font-size:.8rem;
+
+    color:#9ad1ff;
+
+    background:#1b1b1b;
+
+    border-radius:14px;
+
+    padding:4px 10px;
+
+}
+
+
+
+.modeGrid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:10px;
+
+}
+
+
+
+.modeCard{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:4px;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:#1b1b1b;
+
+    border:2px solid #2a2a2a;
+
+    border-radius:14px;
+
+    padding:14px 8px;
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.15s;
+
+    text-align:center;
+
+}
+
+
+
+.modeCard:hover{
+
+    border-color:#4caf50;
+
+    background:#222;
+
+}
+
+
+
+.modeCard.selected{
+
+    border-color:#4caf50;
+
+    background:#1f2e1f;
+
+    box-shadow:0 0 10px rgba(76,175,80,.3);
+
+}
+
+
+
+.modeIcon{
+
+    font-size:1.6rem;
+
+}
+
+
+
+.modeName{
+
+    font-weight:bold;
+
+    font-size:.95rem;
+
+}
+
+
+
+.modeDesc{
+
+    font-size:.75rem;
+
+    color:#aaa;
+
+    line-height:1.3;
+
+}
+
+
+
+.menuButtons{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+    margin-top:20px;
+
+}
+
+
+
+.menuButtons button{
+
+    padding:13px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#333;
+
+    color:white;
+
+    font-size:1rem;
+
+    cursor:pointer;
+
+}
+
+
+
+.menuButtons button:active{
+
+    transform:scale(.97);
+
+}
+
+
+
 /* DESKTOP ENHANCEMENT */
 
 
@@ -923,6 +1393,13 @@ body{
 
 
     .statsPanel{
+
+        grid-template-columns:repeat(3,1fr);
+
+    }
+
+
+    .modeGrid{
 
         grid-template-columns:repeat(3,1fr);
 

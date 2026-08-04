@@ -19,6 +19,30 @@ function setupGame(){
 
     game.scoreMultiplier = 1;
 
+    game.currentPlayer = 0;
+
+    game.players.forEach(player => {
+        player.score = 0;
+        player.streak = 0;
+        player.bestStreak = 0;
+    });
+
+    if(game.mode === MODES.casual){
+
+        game.lives = game.maxLives;
+        game.maxLives = Infinity;
+
+    }
+
+    if(
+        game.mode === MODES.reverse ||
+        game.mode === MODES.twoPlayer
+    ){
+
+        game.answerImageMap =
+            buildAnswerImageMap(game.questions);
+
+    }
 
 }
 
@@ -26,7 +50,10 @@ function setupGame(){
 
 function nextQuestion(){
 
-    if(game.lives <= 0){
+    if(
+        game.mode !== MODES.casual &&
+        game.lives <= 0
+    ){
 
         endGame();
 
@@ -34,22 +61,56 @@ function nextQuestion(){
 
     }
 
+    if(
+        game.maxQuestions !== null &&
+        game.questionsSeen >= game.maxQuestions
+    ){
+
+        endGame();
+
+        return;
+
+    }
 
     game.currentQuestion =
         getNextQuestion();
 
-
     game.questionsSeen++;
-
 
     game.currentQuestionStart =
         Date.now();
 
+    if(
+        game.mode === MODES.hard &&
+        game.currentQuestion
+    ){
+
+        const hard =
+            buildHardAnswers(game.currentQuestion);
+
+        game.currentQuestion.answers =
+            hard.answers;
+
+        game.currentQuestion.correct =
+            hard.correct;
+
+    }
+
+    if(
+        game.mode === MODES.reverse &&
+        game.currentQuestion
+    ){
+
+        game.currentQuestion =
+            buildReverseQuestion(game.currentQuestion);
+
+    }
 
     displayQuestion(
         game.currentQuestion
     );
 
+    updateModeUI();
 
 }
 
@@ -58,24 +119,34 @@ function nextQuestion(){
 
 function displayQuestion(question){
 
+    if(!question) return;
 
     const questionText =
         document.getElementById("question");
 
-
     const image =
         document.getElementById("flagImage");
-
-
 
     questionText.textContent =
         question.question;
 
+    if(game.mode === MODES.reverse){
 
-    image.src =
-        question.image;
+        image.style.display =
+            "none";
 
+    }
+    else{
 
+        image.style.display = "";
+
+        image.src =
+            question.image;
+
+    }
+
+    const isReverse =
+        game.mode === MODES.reverse;
 
     let answers =
         question.answers.map(
@@ -85,6 +156,11 @@ function displayQuestion(question){
 
                     text:answer,
 
+                    image:
+                        isReverse
+                            ? answer
+                            : null,
+
                     correct:
                         index === question.correct
 
@@ -93,41 +169,85 @@ function displayQuestion(question){
             }
         );
 
-
-
     shuffleArray(answers);
-
-
 
     const buttons =
         document.querySelectorAll(".answer");
-
-
 
     buttons.forEach(
         (button,index)=>{
 
             button.disabled=false;
 
-            button.className="answer";
+            button.className =
+                button.classList.contains(
+                    "answerExtra"
+                )
+                    ? "answer answerExtra"
+                    : "answer";
 
-            button.style.visibility =
-                "visible";
+            button.dataset.correct =
+                answers[index].correct
+                    ? "true"
+                    : "false";
 
-            button.textContent =
-                answers[index].text;
+            if(index < answers.length){
 
+                button.style.visibility =
+                    "visible";
 
+                if(isReverse){
 
-            button.onclick=()=>{
+                    button.innerHTML = "";
 
-                answerQuestion(
-                    answers[index].correct,
-                    button
-                );
+                    const img =
+                        document.createElement("img");
 
-            };
+                    img.src = answers[index].text;
 
+                    img.className = "answerFlag";
+
+                    img.alt = "Flag";
+
+                    img.addEventListener(
+                        "click",
+                        (event)=>{
+
+                            event.stopPropagation();
+
+                            openZoom(img);
+
+                        }
+                    );
+
+                    button.appendChild(img);
+
+                }
+                else{
+
+                    button.textContent =
+                        answers[index].text;
+
+                }
+
+                button.onclick=()=>{
+
+                    answerQuestion(
+                        answers[index].correct,
+                        button
+                    );
+
+                };
+
+            }
+            else{
+
+                button.style.visibility =
+                    "hidden";
+
+                button.innerHTML = "";
+
+            }
 
         }
     );
@@ -179,9 +299,23 @@ function answerQuestion(correct,button){
     updateUI();
     updateStatsUI();
 
+    if(game.mode === MODES.daily){
 
+        markDailyDone();
+
+    }
 
     setTimeout(()=>{
+
+        if(
+            game.mode === MODES.twoPlayer &&
+            game.lives > 0
+        ){
+
+            game.currentPlayer =
+                1 - game.currentPlayer;
+
+        }
 
         nextQuestion();
 
@@ -198,13 +332,29 @@ function correctAnswer(button){
 
     button.classList.add("correct");
 
+    const points =
+        game.scoreMultiplier *
+        applyScoreMultiplier();
 
+    game.score += points;
 
-    game.score +=
-    game.scoreMultiplier *
-    applyScoreMultiplier();
+    if(game.mode === MODES.twoPlayer){
 
+        const player =
+            game.players[game.currentPlayer];
 
+        player.score += points;
+
+        player.streak++;
+
+        if(player.streak > player.bestStreak){
+
+            player.bestStreak =
+                player.streak;
+
+        }
+
+    }
 
     game.streak++;
 
@@ -245,10 +395,20 @@ function wrongAnswer(button){
 
     button.classList.add("wrong");
 
+    if(game.mode === MODES.twoPlayer){
 
+        const player =
+            game.players[game.currentPlayer];
 
-    game.lives--;
+        player.streak = 0;
 
+    }
+
+    if(game.mode !== MODES.casual){
+
+        game.lives--;
+
+    }
 
     game.streak=0;
 
@@ -280,22 +440,27 @@ function updateMultiplier(){
 function endGame(){
 
 
-    if(game.score > game.bestScore){
+    if(
+        game.mode !== MODES.twoPlayer &&
+        game.mode !== MODES.daily
+    ){
+
+        if(game.score > game.bestScore){
 
 
-        game.bestScore =
-            game.score;
+            game.bestScore =
+                game.score;
 
 
-        localStorage.setItem(
-            "bestScore",
-            game.bestScore
-        );
+            localStorage.setItem(
+                "bestScore",
+                game.bestScore
+            );
 
+
+        }
 
     }
-
-
 
     showGameOver();
 

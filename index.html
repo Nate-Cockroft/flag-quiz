@@ -42,6 +42,17 @@
         ▶ PLAY
     </button>
 
+    <div class="modeSelector">
+
+        <div class="modeSelectorHeader">
+            <span>Game Mode</span>
+            <span id="modeCount"></span>
+        </div>
+
+        <div class="modeGrid" id="modeGrid"></div>
+
+    </div>
+
     <div class="tagFilterWrap">
 
         <button
@@ -111,6 +122,8 @@
 
     <script src="./data.js"></script>
 
+    <script src="./modes.js"></script>
+
     <script>
      const bestScore = localStorage.getItem("bestScore") || 0;
      const bestStreak = localStorage.getItem("bestStreak") || 0;
@@ -118,7 +131,7 @@
      document.getElementById("bestScore").textContent = bestScore;
      document.getElementById("bestStreak").textContent = bestStreak;
 
-     const TAG_GROUPS = [
+      const TAG_GROUPS = [
          {
              name: "Type",
              tags: ["flag", "country", "city", "province", "state", "island", "territory", "alliance", "border", "other"]
@@ -132,6 +145,73 @@
              tags: ["medieval", "14th-century", "17th-century", "18th-century", "19th-century", "20th-century", "modern"]
          }
      ];
+
+     const MODE_DEFS = [
+         {
+             id: "classic",
+             name: "Classic",
+             icon: "🏆",
+             desc: "5 lives, streak multiplier, endless flags."
+         },
+         {
+             id: "casual",
+             name: "Casual",
+             icon: "🌿",
+             desc: "No lives, no pressure. Just keep going."
+         },
+         {
+             id: "hard",
+             name: "Hard",
+             icon: "💀",
+             desc: "8 options instead of 4."
+         },
+         {
+             id: "reverse",
+             name: "Reverse",
+             icon: "🔁",
+             desc: "See the name, pick the flag."
+         },
+         {
+             id: "daily",
+             name: "Daily Flag",
+             icon: "📅",
+             desc: "One flag everyone gets each day."
+         },
+         {
+             id: "twoPlayer",
+             name: "Two Player",
+             icon: "👥",
+             desc: "Pass and play with a friend."
+         }
+     ];
+
+     function buildModeSelector(){
+         const grid = document.getElementById("modeGrid");
+         const selected = loadMode();
+         grid.innerHTML = "";
+         MODE_DEFS.forEach(def => {
+             const card = document.createElement("button");
+             card.className = "modeCard" + (def.id === selected ? " selected" : "");
+             card.onclick = () => {
+                 saveMode(def.id);
+                 document.querySelectorAll(".modeCard").forEach(c => c.classList.remove("selected"));
+                 card.classList.add("selected");
+             };
+             const icon = document.createElement("span");
+             icon.className = "modeIcon";
+             icon.textContent = def.icon;
+             const name = document.createElement("span");
+             name.className = "modeName";
+             name.textContent = def.name;
+             const desc = document.createElement("span");
+             desc.className = "modeDesc";
+             desc.textContent = def.desc;
+             card.appendChild(icon);
+             card.appendChild(name);
+             card.appendChild(desc);
+             grid.appendChild(card);
+         });
+     }
 
      let questions = [];
 
@@ -148,10 +228,19 @@
          questions = list;
          document.getElementById("questionCount").textContent = countFiltered();
          buildTagModal();
+         buildModeSelector();
+         updateModeCount();
      })
      .catch(() => {
          document.getElementById("questionCount").textContent = "—";
      });
+
+     function updateModeCount(){
+         const mode = loadMode();
+         const def = MODE_DEFS.find(d => d.id === mode);
+         const el = document.getElementById("modeCount");
+         if(el && def) el.textContent = def.icon + " " + def.name;
+     }
 
      function buildTagModal(){
          const body = document.getElementById("tagModalBody");

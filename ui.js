@@ -18,8 +18,18 @@ function updateUI(){
 
     if(score){
 
-        score.textContent =
-            game.score;
+        if(game.mode === MODES.twoPlayer){
+
+            score.textContent =
+                game.players[game.currentPlayer].score;
+
+        }
+        else{
+
+            score.textContent =
+                game.score;
+
+        }
 
     }
 
@@ -27,8 +37,18 @@ function updateUI(){
 
     if(streak){
 
-        streak.textContent =
-            game.streak;
+        if(game.mode === MODES.twoPlayer){
+
+            streak.textContent =
+                game.players[game.currentPlayer].streak;
+
+        }
+        else{
+
+            streak.textContent =
+                game.streak;
+
+        }
 
     }
 
@@ -45,6 +65,33 @@ function updateUI(){
 
 function updateLives(){
 
+    if(
+        game.mode === MODES.casual ||
+        game.mode === MODES.twoPlayer
+    ){
+
+        const livesEl =
+            document.querySelector(".lives");
+
+        if(livesEl){
+
+            livesEl.style.display =
+                "none";
+
+        }
+
+        return;
+
+    }
+
+    const livesEl =
+        document.querySelector(".lives");
+
+    if(livesEl){
+
+        livesEl.style.display = "";
+
+    }
 
     for(
         let i = 1;
@@ -156,28 +203,127 @@ function showGameOver(){
             "bestStreakEnd"
         );
 
+    const gameOverTitle =
+        document.getElementById(
+            "gameOverTitle"
+        );
+
 
 
     if(finalScore){
 
-        finalScore.textContent =
-            game.score;
+        if(game.mode === MODES.twoPlayer){
+
+            finalScore.textContent =
+                game.players[game.currentPlayer].score;
+
+        }
+        else{
+
+            finalScore.textContent =
+                game.score;
+
+        }
 
     }
 
 
     if(bestScore){
 
-        bestScore.textContent =
-            game.bestScore;
+        if(game.mode === MODES.twoPlayer){
+
+            const p1 =
+                game.players[0].score;
+
+            const p2 =
+                game.players[1].score;
+
+            const winner =
+                p1 === p2
+                    ? "It's a tie!"
+                    : (p1 > p2
+                        ? game.players[0].name + " wins!"
+                        : game.players[1].name + " wins!");
+
+            bestScore.textContent =
+                game.players[0].name + ": " +
+                p1 +
+                "  |  " +
+                game.players[1].name + ": " +
+                p2 +
+                "  —  " +
+                winner;
+
+        }
+        else if(game.mode === MODES.daily){
+
+            bestScore.textContent =
+                "Come back tomorrow for a new flag!";
+
+        }
+        else{
+
+            bestScore.textContent =
+                game.bestScore;
+
+        }
 
     }
 
 
     if(bestStreak){
 
-        bestStreak.textContent =
-            game.bestStreak;
+        if(game.mode === MODES.twoPlayer){
+
+            const p1 =
+                game.players[0];
+
+            const p2 =
+                game.players[1];
+
+            bestStreak.textContent =
+                p1.name + " streak: " +
+                p1.bestStreak +
+                "  |  " +
+                p2.name + " streak: " +
+                p2.bestStreak;
+
+        }
+        else{
+
+            bestStreak.textContent =
+                game.bestStreak;
+
+        }
+
+    }
+
+    if(gameOverTitle){
+
+        if(game.mode === MODES.daily){
+
+            gameOverTitle.textContent =
+                "Daily Flag Complete!";
+
+        }
+        else if(game.mode === MODES.twoPlayer){
+
+            gameOverTitle.textContent =
+                "Game Complete!";
+
+        }
+        else if(game.mode === MODES.casual){
+
+            gameOverTitle.textContent =
+                "Session Ended";
+
+        }
+        else{
+
+            gameOverTitle.textContent =
+                "Game Over";
+
+        }
 
     }
 
@@ -193,11 +339,38 @@ function showGameOver(){
         game.currentQuestion
     ){
 
-        missed.textContent =
-            "Answer: " +
-            game.currentQuestion.answers[
-                game.currentQuestion.correct
-            ];
+        if(game.mode === MODES.reverse){
+
+            const name =
+                game.currentQuestion.answerText ||
+                "?";
+
+            const imageUrl =
+                game.answerImageMap &&
+                game.answerImageMap[name.toLowerCase()];
+
+            missed.textContent =
+                "Answer: " + name;
+
+            if(imageUrl){
+
+                missed.innerHTML =
+                    "Answer: " + name +
+                    ' <img src="' + imageUrl +
+                    '" alt="" class="missedFlag">';
+
+            }
+
+        }
+        else{
+
+            missed.textContent =
+                "Answer: " +
+                game.currentQuestion.answers[
+                    game.currentQuestion.correct
+                ];
+
+        }
 
     }
 
@@ -226,5 +399,199 @@ function showWrong(button){
         "wrong"
     );
 
+
+}
+
+
+function updateModeUI(){
+
+    const modeBadge =
+        document.getElementById(
+            "modeBadge"
+        );
+
+    if(modeBadge){
+
+        modeBadge.textContent =
+            MODE_LABELS[game.mode] || "";
+
+    }
+
+
+    const turnIndicator =
+        document.getElementById(
+            "turnIndicator"
+        );
+
+    if(turnIndicator){
+
+        if(game.mode === MODES.twoPlayer){
+
+            const player =
+                game.players[game.currentPlayer];
+
+            turnIndicator.textContent =
+                player.name + "'s turn";
+
+            turnIndicator.classList.add(
+                "visible"
+            );
+
+        }
+        else{
+
+            turnIndicator.classList.remove(
+                "visible"
+            );
+
+        }
+
+    }
+
+
+    const endGameBtn =
+        document.getElementById(
+            "endGameBtn"
+        );
+
+    if(endGameBtn){
+
+        if(
+            game.mode === MODES.casual
+        ){
+
+            endGameBtn.classList.remove(
+                "hidden"
+            );
+
+        }
+        else{
+
+            endGameBtn.classList.add(
+                "hidden"
+            );
+
+        }
+
+    }
+
+
+    const extraAnswers =
+        document.querySelectorAll(
+            ".answerExtra"
+        );
+
+    const answersContainer =
+        document.getElementById(
+            "answersContainer"
+        );
+
+    if(answersContainer){
+
+        if(game.mode === MODES.hard){
+
+            answersContainer.classList.add(
+                "answersHard"
+            );
+
+        }
+        else{
+
+            answersContainer.classList.remove(
+                "answersHard"
+            );
+
+        }
+
+    }
+
+}
+
+
+function openZoom(imageEl){
+
+    const overlay =
+        document.getElementById(
+            "zoomOverlay"
+        );
+
+    const zoomImage =
+        document.getElementById(
+            "zoomImage"
+        );
+
+    if(!overlay || !zoomImage) return;
+
+    zoomImage.src =
+        imageEl.src;
+
+    overlay.classList.remove(
+        "hidden"
+    );
+
+}
+
+
+function closeZoom(){
+
+    const overlay =
+        document.getElementById(
+            "zoomOverlay"
+        );
+
+    if(overlay){
+
+        overlay.classList.add(
+            "hidden"
+        );
+
+    }
+
+}
+
+
+function setupZoomTriggers(){
+
+
+    const flagImage =
+        document.getElementById(
+            "flagImage"
+        );
+
+    if(flagImage){
+
+        flagImage.addEventListener(
+            "click",
+            () => {
+
+                if(flagImage.src){
+
+                    openZoom(flagImage);
+
+                }
+
+            }
+        );
+
+        flagImage.classList.add(
+            "zoomable"
+        );
+
+    }
+
+
+    const overlay =
+        document.getElementById(
+            "zoomOverlay"
+        );
+
+    if(overlay){
+
+        overlay.addEventListener(
+            "click",
+            closeZoom
+        );
+
+    }
 
 }

@@ -26,6 +26,15 @@ const game = {
 
     scoreMultiplier: 1,
 
+    mode: MODES.classic,
+    maxQuestions: null,
+
+    players: [
+        { name: "Player 1", score: 0, streak: 0, bestStreak: 0 },
+        { name: "Player 2", score: 0, streak: 0, bestStreak: 0 }
+    ],
+    currentPlayer: 0,
+
     powerups: {
         fiftyFifty: 0,
         skip: 0,
@@ -41,9 +50,45 @@ window.addEventListener("DOMContentLoaded", async () => {
 
         await loadQuestions();
 
+        game.mode = loadMode();
+        game.maxQuestions = getMaxQuestions(game.mode);
+
+        if(
+            game.mode === MODES.daily &&
+            isDailyDone()
+        ){
+
+            alert(
+                "You already completed today's Daily Flag!"
+            );
+
+            location.href = "index.html";
+
+            return;
+
+        }
+
+        if(
+            game.mode === MODES.daily &&
+            game.questions.length > 0
+        ){
+
+            const daily =
+                getDailyQuestion(game.questions);
+
+            game.questions = [daily];
+
+            resetQuestionPool();
+
+        }
+
         setupGame();
 
+        setupZoomTriggers();
+
         updateUI();
+
+        updateModeUI();
 
         nextQuestion();
 

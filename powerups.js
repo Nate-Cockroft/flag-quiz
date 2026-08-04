@@ -152,13 +152,14 @@ function useFiftyFifty(){
 
 
         if(
-            button.textContent !==
-            getCorrectAnswerText()
+            button.dataset.correct === "false"
             &&
             removed < 2
         ){
 
             button.dataset.fiftyHidden = "true";
+
+            button.style.visibility = "hidden";
 
             removed++;
 

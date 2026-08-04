@@ -78,6 +78,16 @@
             <span id="streak">0</span>
         </div>
 
+        <div class="modeBadge" id="modeBadge"></div>
+
+        <button
+            class="endGameBtn hidden"
+            id="endGameBtn"
+            onclick="endGame()"
+        >
+            ⏹ End
+        </button>
+
         <div class="lives">
 
     <div class="heart" id="heart1">❤️</div>
@@ -92,6 +102,11 @@
 
     <div class="flagCard">
 
+        <div
+            class="turnIndicator"
+            id="turnIndicator"
+        ></div>
+
         <h2 id="question">
             Loading question...
         </h2>
@@ -100,14 +115,22 @@
             id="flagImage"
             src=""
             alt="Flag"
+            class="zoomable"
         >
 
-        <div class="answers">
+        <div
+            class="answers"
+            id="answersContainer"
+        >
 
             <button class="answer"></button>
             <button class="answer"></button>
             <button class="answer"></button>
             <button class="answer"></button>
+            <button class="answer answerExtra"></button>
+            <button class="answer answerExtra"></button>
+            <button class="answer answerExtra"></button>
+            <button class="answer answerExtra"></button>
 
         </div>
 
@@ -115,7 +138,7 @@
 
     <div class="gameOver hidden" id="gameOver">
 
-        <h2>Game Over</h2>
+        <h2 id="gameOverTitle">Game Over</h2>
 
         <p>
             Final Score:
@@ -158,6 +181,12 @@
 
 </div>
 
+<div class="zoomOverlay hidden" id="zoomOverlay">
+
+    <img id="zoomImage" src="" alt="Flag">
+
+</div>
+
 <script>
 if("serviceWorker" in navigator){
     navigator.serviceWorker.register("/sw.js");
@@ -165,6 +194,7 @@ if("serviceWorker" in navigator){
 </script>
 
 <script src="./data.js"></script>
+<script src="./modes.js"></script>
 <script src="./questions.js"></script>
 <script src="./game.js"></script>
 <script src="./ui.js"></script>
