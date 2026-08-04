@@ -23,11 +23,26 @@ function updateUI(){
             score.textContent =
                 game.players[game.currentPlayer].score;
 
+            score.classList.toggle(
+                "p1",
+                game.currentPlayer === 0
+            );
+
+            score.classList.toggle(
+                "p2",
+                game.currentPlayer === 1
+            );
+
         }
         else{
 
             score.textContent =
                 game.score;
+
+            score.classList.remove(
+                "p1",
+                "p2"
+            );
 
         }
 
@@ -42,11 +57,26 @@ function updateUI(){
             streak.textContent =
                 game.players[game.currentPlayer].streak;
 
+            streak.classList.toggle(
+                "p1",
+                game.currentPlayer === 0
+            );
+
+            streak.classList.toggle(
+                "p2",
+                game.currentPlayer === 1
+            );
+
         }
         else{
 
             streak.textContent =
                 game.streak;
+
+            streak.classList.remove(
+                "p1",
+                "p2"
+            );
 
         }
 
@@ -430,6 +460,9 @@ function updateModeUI(){
             const player =
                 game.players[game.currentPlayer];
 
+            const playerIndex =
+                game.currentPlayer + 1;
+
             turnIndicator.textContent =
                 player.name + "'s turn";
 
@@ -437,12 +470,57 @@ function updateModeUI(){
                 "visible"
             );
 
+            turnIndicator.classList.toggle(
+                "p1",
+                playerIndex === 1
+            );
+
+            turnIndicator.classList.toggle(
+                "p2",
+                playerIndex === 2
+            );
+
+            const flagCard =
+                document.querySelector(
+                    ".flagCard"
+                );
+
+            if(flagCard){
+
+                flagCard.classList.toggle(
+                    "p1",
+                    playerIndex === 1
+                );
+
+                flagCard.classList.toggle(
+                    "p2",
+                    playerIndex === 2
+                );
+
+            }
+
         }
         else{
 
             turnIndicator.classList.remove(
-                "visible"
+                "visible",
+                "p1",
+                "p2"
             );
+
+            const flagCard =
+                document.querySelector(
+                    ".flagCard"
+                );
+
+            if(flagCard){
+
+                flagCard.classList.remove(
+                    "p1",
+                    "p2"
+                );
+
+            }
 
         }
 

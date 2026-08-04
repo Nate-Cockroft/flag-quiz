@@ -97,6 +97,28 @@ body{
 
 
 
+.score.p1,
+.streak.p1{
+
+    background:#1e4f8f;
+
+    box-shadow:0 0 8px rgba(76,156,255,.35);
+
+}
+
+
+
+.score.p2,
+.streak.p2{
+
+    background:#b35a12;
+
+    box-shadow:0 0 8px rgba(255,150,60,.35);
+
+}
+
+
+
 .lives{
 
     display:flex;
@@ -182,6 +204,62 @@ body{
 .turnIndicator.visible{
 
     display:block;
+
+}
+
+
+
+.turnIndicator.p1{
+
+    background:#1e4f8f;
+
+    color:#fff;
+
+    padding:10px;
+
+    border-radius:12px;
+
+    font-size:1.25rem;
+
+    box-shadow:0 0 12px rgba(76,156,255,.4);
+
+}
+
+
+
+.turnIndicator.p2{
+
+    background:#b35a12;
+
+    color:#fff;
+
+    padding:10px;
+
+    border-radius:12px;
+
+    font-size:1.25rem;
+
+    box-shadow:0 0 12px rgba(255,150,60,.4);
+
+}
+
+
+
+.flagCard.p1{
+
+    border:3px solid #2e7dff;
+
+    box-shadow:0 0 18px rgba(46,125,255,.35);
+
+}
+
+
+
+.flagCard.p2{
+
+    border:3px solid #ff8f2e;
+
+    box-shadow:0 0 18px rgba(255,143,46,.35);
 
 }
 
