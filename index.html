@@ -53,6 +53,20 @@
 
     </div>
 
+    <div class="modifierWrap">
+
+        <div class="modifierHeader">
+
+            <span>Modifiers</span>
+
+            <span id="modifierScore">×1.0</span>
+
+        </div>
+
+        <div class="modifierGrid" id="modifierGrid"></div>
+
+    </div>
+
     <div class="tagFilterWrap">
 
         <button
@@ -123,6 +137,8 @@
     <script src="./data.js"></script>
 
     <script src="./modes.js"></script>
+
+    <script src="./modifiers.js"></script>
 
     <script>
      const bestScore = localStorage.getItem("bestScore") || 0;
@@ -213,6 +229,43 @@
          });
      }
 
+     function buildModifierSelector(){
+         const grid = document.getElementById("modifierGrid");
+         const active = loadModifiers();
+         grid.innerHTML = "";
+         MODIFIER_DEFS.forEach(def => {
+             const chip = document.createElement("button");
+             chip.className = "modifierChip" + (active.includes(def.id) ? " active" : "");
+             const icon = document.createElement("span");
+             icon.className = "modifierIcon";
+             icon.textContent = def.icon;
+             const name = document.createElement("span");
+             name.className = "modifierName";
+             name.textContent = def.name;
+             const mult = document.createElement("span");
+             mult.className = "modifierMult";
+             mult.textContent = "×" + def.multiplier;
+             chip.appendChild(icon);
+             chip.appendChild(name);
+             chip.appendChild(mult);
+             chip.onclick = () => {
+                 const list = loadModifiers();
+                 const idx = list.indexOf(def.id);
+                 if(idx > -1) list.splice(idx, 1);
+                 else list.push(def.id);
+                 saveModifiers(list);
+                 buildModifierSelector();
+                 updateModifierScore();
+             };
+             grid.appendChild(chip);
+         });
+     }
+
+     function updateModifierScore(){
+         const el = document.getElementById("modifierScore");
+         if(el) el.textContent = "×" + getModifierMultiplier();
+     }
+
      let questions = [];
 
      function countFiltered(){
@@ -229,6 +282,8 @@
          document.getElementById("questionCount").textContent = countFiltered();
          buildTagModal();
          buildModeSelector();
+         buildModifierSelector();
+         updateModifierScore();
          updateModeCount();
      })
      .catch(() => {

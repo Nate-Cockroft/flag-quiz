@@ -90,6 +90,8 @@ window.addEventListener("DOMContentLoaded", async () => {
 
         updateModeUI();
 
+        updatePowerupUI();
+
         nextQuestion();
 
     }

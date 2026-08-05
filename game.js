@@ -36,6 +36,23 @@ function setupGame(){
     }
 
     if(
+        hasModifier(MODIFIERS.oneLife) &&
+        game.mode !== MODES.casual
+    ){
+
+        game.maxLives = 1;
+
+        game.lives = 1;
+
+        game.players.forEach(player => {
+
+            player.lives = 1;
+
+        });
+
+    }
+
+    if(
         game.mode === MODES.reverse ||
         game.mode === MODES.twoPlayer
     ){
@@ -126,6 +143,8 @@ function nextQuestion(){
     );
 
     updateModeUI();
+
+    startTimerIfNeeded();
 
 }
 
@@ -277,6 +296,8 @@ function displayQuestion(question){
 function answerQuestion(correct,button){
 
 
+    stopTimer();
+
     const answerTime =
         (Date.now()-game.currentQuestionStart)/1000;
 
@@ -304,6 +325,20 @@ function answerQuestion(correct,button){
     }
     else{
 
+        if(!button){
+
+            const correctButton =
+                document.querySelector(
+                    '.answer[data-correct="true"]'
+                );
+
+            if(correctButton){
+
+                showCorrect(correctButton);
+
+            }
+
+        }
 
         wrongAnswer(button);
 
@@ -347,11 +382,32 @@ function answerQuestion(correct,button){
 function correctAnswer(button){
 
 
-    button.classList.add("correct");
+    if(button){
 
-    const points =
+        button.classList.add("correct");
+
+    }
+
+    const answerTime =
+        (Date.now()-game.currentQuestionStart)/1000;
+
+    let points =
         game.scoreMultiplier *
-        applyScoreMultiplier();
+        applyScoreMultiplier() *
+        getModifierMultiplier();
+
+    if(
+        hasModifier(MODIFIERS.speedBonus) &&
+        answerTime < SPEED_BONUS_SECONDS
+    ){
+
+        points +=
+            Math.round(
+                points *
+                SPEED_BONUS_MULTIPLIER
+            );
+
+    }
 
     game.score += points;
 
@@ -410,7 +466,16 @@ function correctAnswer(button){
 function wrongAnswer(button){
 
 
-    button.classList.add("wrong");
+    if(button){
+
+        button.classList.add("wrong");
+
+    }
+
+    const penalty =
+        hasModifier(MODIFIERS.noMercy)
+            ? 2
+            : 1;
 
     if(game.mode === MODES.twoPlayer){
 
@@ -419,12 +484,12 @@ function wrongAnswer(button){
 
         player.streak = 0;
 
-        player.lives--;
+        player.lives -= penalty;
 
     }
     else if(game.mode !== MODES.casual){
 
-        game.lives--;
+        game.lives -= penalty;
 
     }
 
@@ -458,6 +523,10 @@ function updateMultiplier(){
 function endGame(){
 
 
+    stopTimer();
+
+    hideTimer();
+
     if(
         game.mode !== MODES.twoPlayer &&
         game.mode !== MODES.daily
@@ -481,5 +550,126 @@ function endGame(){
     }
 
     showGameOver();
+
+}
+
+
+
+
+function startTimerIfNeeded(){
+
+
+    stopTimer();
+
+    if(
+        !hasModifier(MODIFIERS.timeAttack) ||
+        !game.currentQuestion
+    ){
+
+        hideTimer();
+
+        return;
+
+    }
+
+
+    const bar =
+        document.getElementById(
+            "timerBar"
+        );
+
+    const fill =
+        document.getElementById(
+            "timerFill"
+        );
+
+    if(bar){
+
+        bar.classList.remove("hidden");
+
+    }
+
+    if(fill){
+
+        fill.style.width = "100%";
+
+        fill.style.background = "#4caf50";
+
+    }
+
+
+    const start = Date.now();
+
+    game.timerInterval = setInterval(() => {
+
+        const elapsed =
+            (Date.now()-start)/1000;
+
+        const remaining =
+            Math.max(
+                0,
+                TIME_ATTACK_SECONDS - elapsed
+            );
+
+        const pct =
+            (remaining / TIME_ATTACK_SECONDS) * 100;
+
+        if(fill){
+
+            fill.style.width = pct + "%";
+
+            fill.style.background =
+                pct > 30
+                    ? "#4caf50"
+                    : (pct > 10
+                        ? "#ffd75e"
+                        : "#ff5252");
+
+        }
+
+        if(remaining <= 0){
+
+            stopTimer();
+
+            answerQuestion(false, null);
+
+        }
+
+    }, 100);
+
+}
+
+
+
+
+function stopTimer(){
+
+
+    if(game.timerInterval){
+
+        clearInterval(game.timerInterval);
+
+        game.timerInterval = null;
+
+    }
+
+}
+
+
+
+
+function hideTimer(){
+
+
+    const bar =
+        document.getElementById(
+            "timerBar"
+        );
+
+    if(bar){
+
+        bar.classList.add("hidden");
+
+    }
 
 }

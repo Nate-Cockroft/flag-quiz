@@ -22,6 +22,8 @@ const powerupSystem = {
 function increasePowerupMeter(){
 
 
+    if(hasModifier(MODIFIERS.noPowerups)) return;
+
     powerupSystem.meter++;
 
 
@@ -96,6 +98,8 @@ function giveRandomPowerup(){
 function useFiftyFifty(){
 
 
+    if(hasModifier(MODIFIERS.noPowerups)) return;
+
     if(game.powerups.fiftyFifty <= 0){
 
         return;
@@ -152,6 +156,8 @@ function useFiftyFifty(){
 function useSkip(){
 
 
+    if(hasModifier(MODIFIERS.noPowerups)) return;
+
     if(game.powerups.skip <= 0){
 
         return;
@@ -178,6 +184,8 @@ function useSkip(){
 
 function useDoubleScore(){
 
+
+    if(hasModifier(MODIFIERS.noPowerups)) return;
 
     if(game.powerups.doubleScore <= 0){
 
@@ -250,6 +258,20 @@ function updatePowerupUI(){
         document.getElementById(
             "powerMeter"
         );
+
+    const powerupsEl =
+        document.querySelector(
+            ".powerups"
+        );
+
+    if(powerupsEl){
+
+        powerupsEl.style.display =
+            hasModifier(MODIFIERS.noPowerups)
+                ? "none"
+                : "";
+
+    }
 
 
 
