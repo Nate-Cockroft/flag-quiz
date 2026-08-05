@@ -42,14 +42,64 @@
         ▶ PLAY
     </button>
 
-    <div class="modeSelector">
+    <div class="modeFilterWrap">
 
-        <div class="modeSelectorHeader">
-            <span>Game Mode</span>
+        <button
+            class="tagButton"
+            id="modeButton"
+            onclick="toggleModeModal()"
+        >
+            🎮 Game Mode:
             <span id="modeCount"></span>
-        </div>
+        </button>
 
-        <div class="modeGrid" id="modeGrid"></div>
+        <div
+            class="tagModal"
+            id="modeModal"
+            hidden
+        >
+
+            <div class="tagModalCard">
+
+                <div class="tagModalHeader">
+
+                    <span>Select Game Mode</span>
+
+                    <button
+                        class="tagModalClose"
+                        onclick="closeModeModal()"
+                    >
+                        ✕
+                    </button>
+
+                </div>
+
+                <div
+                    class="tagModalBody"
+                    id="modeModalBody"
+                >
+
+                    <div
+                        class="modeGrid"
+                        id="modeGrid"
+                    ></div>
+
+                </div>
+
+                <div class="tagModalFooter">
+
+                    <button
+                        class="tagModalReset"
+                        onclick="closeModeModal()"
+                    >
+                        Done
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
@@ -212,6 +262,8 @@
                  saveMode(def.id);
                  document.querySelectorAll(".modeCard").forEach(c => c.classList.remove("selected"));
                  card.classList.add("selected");
+                 updateModeCount();
+                 closeModeModal();
              };
              const icon = document.createElement("span");
              icon.className = "modeIcon";
@@ -227,6 +279,15 @@
              card.appendChild(desc);
              grid.appendChild(card);
          });
+     }
+
+     function toggleModeModal(){
+         const modal = document.getElementById("modeModal");
+         modal.hidden = !modal.hidden;
+     }
+
+     function closeModeModal(){
+         document.getElementById("modeModal").hidden = true;
      }
 
      function buildModifierSelector(){
