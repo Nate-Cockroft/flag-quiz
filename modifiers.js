@@ -6,6 +6,7 @@
 const MODIFIER_KEY = "flagquiz.modifiers";
 
 const MODIFIERS = {
+    reverse: "reverse",
     timeAttack: "timeAttack",
     oneLife: "oneLife",
     noPowerups: "noPowerups",
@@ -14,6 +15,13 @@ const MODIFIERS = {
 };
 
 const MODIFIER_DEFS = [
+    {
+        id: "reverse",
+        icon: "🔁",
+        name: "Reverse",
+        desc: "See the name, pick the flag.",
+        multiplier: 1.0
+    },
     {
         id: "timeAttack",
         icon: "⏱",
@@ -80,4 +88,11 @@ function getModifierMultiplier() {
         const def = MODIFIER_DEFS.find(d => d.id === id);
         return def ? total * def.multiplier : total;
     }, 1);
+}
+
+function isReverseActive() {
+    return (
+        game.mode === MODES.reverse ||
+        hasModifier(MODIFIERS.reverse)
+    );
 }

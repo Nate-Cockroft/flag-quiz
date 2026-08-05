@@ -960,7 +960,13 @@ body{
 
     width:100%;
 
-    display:block;
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    min-height:50px;
 
 }
 
@@ -993,6 +999,16 @@ body{
     background:#2a2a2a;
 
     border-color:#888;
+
+}
+
+
+
+.tagButtonChevron{
+
+    color:#aaa;
+
+    font-size:.8rem;
 
 }
 

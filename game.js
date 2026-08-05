@@ -53,7 +53,7 @@ function setupGame(){
     }
 
     if(
-        game.mode === MODES.reverse ||
+        isReverseActive() ||
         game.mode === MODES.twoPlayer
     ){
 
@@ -129,7 +129,7 @@ function nextQuestion(){
     }
 
     if(
-        game.mode === MODES.reverse &&
+        isReverseActive() &&
         game.currentQuestion
     ){
 
@@ -164,7 +164,7 @@ function displayQuestion(question){
     questionText.textContent =
         question.question;
 
-    if(game.mode === MODES.reverse){
+    if(isReverseActive()){
 
         image.style.display =
             "none";
@@ -180,7 +180,7 @@ function displayQuestion(question){
     }
 
     const isReverse =
-        game.mode === MODES.reverse;
+        isReverseActive();
 
     let answers =
         question.answers.map(

@@ -446,7 +446,7 @@ function showGameOver(){
         game.currentQuestion
     ){
 
-        if(game.mode === MODES.reverse){
+        if(isReverseActive()){
 
             const name =
                 game.currentQuestion.answerText ||
