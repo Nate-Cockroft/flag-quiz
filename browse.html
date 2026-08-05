@@ -1,59 +1,245 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browse Flags - Flag Quiz</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
 
-<div class="background"></div>
+     const APP_VERSION = "4";
+     try {
+         const v = localStorage.getItem("flagquiz.version");
+         if (v && v !== APP_VERSION) {
+             localStorage.setItem("flagquiz.version", APP_VERSION);
+             if ("serviceWorker" in navigator) {
+                 navigator.serviceWorker.getRegistrations().then(regs =>
+                     regs.forEach(reg => reg.unregister())
+                 );
+             }
+             if (window.caches) {
+                 caches.keys().then(names =>
+                     Promise.all(names.map(n => caches.delete(n)))
+                 );
+             }
+             location.reload();
+         } else if (!v) {
+             localStorage.setItem("flagquiz.version", APP_VERSION);
+         }
+     } catch (e) {}
+     if("serviceWorker" in navigator){
+         navigator.serviceWorker.register("/sw.js");
+     }
+    
 
-<div class="quizContainer">
+     const bestScore = localStorage.getItem("bestScore") || 0;
+     const bestStreak = localStorage.getItem("bestStreak") || 0;
 
-    <button onclick="location.href='index.html'" class="backButton">
-        ← Back
-    </button>
+     document.getElementById("bestScore").textContent = bestScore;
+     document.getElementById("bestStreak").textContent = bestStreak;
 
-    <h1>🔍 Browse Flags</h1>
+      const TAG_GROUPS = [
+         {
+             name: "Type",
+             tags: ["flag", "country", "city", "province", "state", "island", "territory", "alliance", "border", "other"]
+         },
+         {
+             name: "Continent",
+             tags: ["africa", "antarctica", "asia", "europe", "north-america", "oceania", "south-america"]
+         },
+         {
+             name: "Time period",
+             tags: ["medieval", "14th-century", "17th-century", "18th-century", "19th-century", "20th-century", "modern"]
+         }
+     ];
 
-    <div class="browseFilters">
+     const MODE_DEFS = [
+         {
+             id: "classic",
+             name: "Classic",
+             icon: "🏆",
+             desc: "5 lives, streak multiplier, endless flags."
+         },
+         {
+             id: "casual",
+             name: "Casual",
+             icon: "🌿",
+             desc: "No lives, no pressure. Just keep going."
+         },
+         {
+             id: "hard",
+             name: "Hard",
+             icon: "💀",
+             desc: "8 options instead of 4."
+         },
+         {
+             id: "daily",
+             name: "Daily Flag",
+             icon: "📅",
+             desc: "One flag everyone gets each day."
+         },
+         {
+             id: "twoPlayer",
+             name: "Two Player",
+             icon: "👥",
+             desc: "Pass and play with a friend."
+         }
+     ];
 
-        <input type="text" id="searchInput" placeholder="Search flags..." class="searchInput">
+     function buildModeSelector(){
+         const grid = document.getElementById("modeGrid");
+         const selected = loadMode();
+         grid.innerHTML = "";
+         MODE_DEFS.forEach(def => {
+             const card = document.createElement("button");
+             card.className = "modeCard" + (def.id === selected ? " selected" : "");
+             card.onclick = () => {
+                 saveMode(def.id);
+                 document.querySelectorAll(".modeCard").forEach(c => c.classList.remove("selected"));
+                 card.classList.add("selected");
+                 updateModeCount();
+                 closeModeModal();
+             };
+             const icon = document.createElement("span");
+             icon.className = "modeIcon";
+             icon.textContent = def.icon;
+             const name = document.createElement("span");
+             name.className = "modeName";
+             name.textContent = def.name;
+             const desc = document.createElement("span");
+             desc.className = "modeDesc";
+             desc.textContent = def.desc;
+             card.appendChild(icon);
+             card.appendChild(name);
+             card.appendChild(desc);
+             grid.appendChild(card);
+         });
+     }
 
-        <select id="tagSelect" class="searchInput">
-            <option value="">All tags</option>
-        </select>
+     function toggleModeModal(){
+         const modal = document.getElementById("modeModal");
+         modal.hidden = !modal.hidden;
+     }
 
-        <button id="clearFilters" class="clearButton">Clear</button>
+     function closeModeModal(){
+         document.getElementById("modeModal").hidden = true;
+     }
 
-    </div>
+     function buildModifierSelector(){
+         const grid = document.getElementById("modifierGrid");
+         const active = loadModifiers();
+         grid.innerHTML = "";
+         MODIFIER_DEFS.forEach(def => {
+             const chip = document.createElement("button");
+             chip.className = "modifierChip" + (active.includes(def.id) ? " active" : "");
+             const icon = document.createElement("span");
+             icon.className = "modifierIcon";
+             icon.textContent = def.icon;
+             const name = document.createElement("span");
+             name.className = "modifierName";
+             name.textContent = def.name;
+             const mult = document.createElement("span");
+             mult.className = "modifierMult";
+             mult.textContent = "×" + def.multiplier;
+             chip.appendChild(icon);
+             chip.appendChild(name);
+             chip.appendChild(mult);
+             chip.onclick = () => {
+                 const list = loadModifiers();
+                 const idx = list.indexOf(def.id);
+                 if(idx > -1) list.splice(idx, 1);
+                 else list.push(def.id);
+                 saveModifiers(list);
+                 buildModifierSelector();
+                 updateModifierScore();
+             };
+             grid.appendChild(chip);
+         });
+     }
 
-    <div id="flagList" class="flagList">
+     function toggleModifierModal(){
+         const modal = document.getElementById("modifierModal");
+         modal.hidden = !modal.hidden;
+     }
 
-        <p>Loading flags...</p>
+     function closeModifierModal(){
+         document.getElementById("modifierModal").hidden = true;
+     }
 
-    </div>
+     function updateModifierScore(){
+         const el = document.getElementById("modifierScore");
+         if(el) el.textContent = "×" + getModifierMultiplier();
+     }
 
-    <button onclick="location.href='index.html'" class="backButton">
-        ← Back
-    </button>
+     let questions = [];
 
-    <button onclick="location.href='index.html'" class="playAgain">
-        Menu
-    </button>
+     function countFiltered(){
+         const excluded = loadExcludedTags();
+         return questions.filter(q => {
+             const tags = q.tags;
+             return tags.length === 0 || !tags.some(t => excluded.includes(t));
+         }).length;
+     }
 
-</div>
+     loadQuestionsData()
+     .then(list => {
+         questions = list;
+         document.getElementById("questionCount").textContent = countFiltered();
+         buildTagModal();
+         buildModeSelector();
+         buildModifierSelector();
+         updateModifierScore();
+         updateModeCount();
+     })
+     .catch(() => {
+         document.getElementById("questionCount").textContent = "—";
+     });
 
-<script>
-if("serviceWorker" in navigator){
-    navigator.serviceWorker.register("/sw.js");
-}
-</script>
+     function updateModeCount(){
+         const mode = loadMode();
+         const def = MODE_DEFS.find(d => d.id === mode);
+         const el = document.getElementById("modeCount");
+         if(el && def) el.textContent = def.icon + " " + def.name;
+     }
 
-<script src="./data.js"></script>
-<script src="./browse.js"></script>
+     function buildTagModal(){
+         const body = document.getElementById("tagModalBody");
+         const excluded = loadExcludedTags();
+         body.innerHTML = "";
+         TAG_GROUPS.forEach(group => {
+             const section = document.createElement("div");
+             section.className = "tagGroup";
+             const title = document.createElement("div");
+             title.className = "tagGroupTitle";
+             title.textContent = group.name;
+             section.appendChild(title);
+             group.tags.forEach(tag => {
+                 const label = document.createElement("label");
+                 const cb = document.createElement("input");
+                 cb.type = "checkbox";
+                 cb.checked = !excluded.includes(tag);
+                 cb.addEventListener("change", () => {
+                     const list = loadExcludedTags();
+                     const idx = list.indexOf(tag);
+                     if(cb.checked && idx > -1) list.splice(idx, 1);
+                     if(!cb.checked && idx === -1) list.push(tag);
+                     saveExcludedTags(list);
+                     label.classList.toggle("checked", cb.checked);
+                     document.getElementById("questionCount").textContent = countFiltered();
+                 });
+                 label.appendChild(cb);
+                 label.appendChild(document.createTextNode(" " + tag));
+                 label.classList.toggle("checked", cb.checked);
+                 section.appendChild(label);
+             });
+             body.appendChild(section);
+         });
+     }
 
-</body>
-</html>
+     function toggleTagModal(){
+         const modal = document.getElementById("tagModal");
+         modal.hidden = !modal.hidden;
+     }
+
+     function closeTagModal(){
+         document.getElementById("tagModal").hidden = true;
+     }
+
+     function resetTagFilters(){
+         saveExcludedTags([...DEFAULT_EXCLUDED_TAGS]);
+         buildTagModal();
+         document.getElementById("questionCount").textContent = countFiltered();
+     }
+    
