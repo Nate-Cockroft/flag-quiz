@@ -1,4 +1,4 @@
-const CACHE_NAME = "flag-quiz-v8";
+const CACHE_NAME = "flag-quiz-v9";
 const ASSETS = [
     "/",
     "/index.html",
@@ -6,6 +6,8 @@ const ASSETS = [
     "/browse.html",
     "/style.css",
     "/data.js",
+    "/modes.js",
+    "/modifiers.js",
     "/game.js",
     "/questions.js",
     "/ui.js",
