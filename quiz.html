@@ -1,245 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flag Quiz</title>
 
-     const APP_VERSION = "4";
-     try {
-         const v = localStorage.getItem("flagquiz.version");
-         if (v && v !== APP_VERSION) {
-             localStorage.setItem("flagquiz.version", APP_VERSION);
-             if ("serviceWorker" in navigator) {
-                 navigator.serviceWorker.getRegistrations().then(regs =>
-                     regs.forEach(reg => reg.unregister())
-                 );
-             }
-             if (window.caches) {
-                 caches.keys().then(names =>
-                     Promise.all(names.map(n => caches.delete(n)))
-                 );
-             }
-             location.reload();
-         } else if (!v) {
-             localStorage.setItem("flagquiz.version", APP_VERSION);
-         }
-     } catch (e) {}
-     if("serviceWorker" in navigator){
-         navigator.serviceWorker.register("/sw.js");
-     }
-    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-     const bestScore = localStorage.getItem("bestScore") || 0;
-     const bestStreak = localStorage.getItem("bestStreak") || 0;
+<div class="background"></div>
 
-     document.getElementById("bestScore").textContent = bestScore;
-     document.getElementById("bestStreak").textContent = bestStreak;
+<div class="quizContainer">
 
-      const TAG_GROUPS = [
-         {
-             name: "Type",
-             tags: ["flag", "country", "city", "province", "state", "island", "territory", "alliance", "border", "other"]
-         },
-         {
-             name: "Continent",
-             tags: ["africa", "antarctica", "asia", "europe", "north-america", "oceania", "south-america"]
-         },
-         {
-             name: "Time period",
-             tags: ["medieval", "14th-century", "17th-century", "18th-century", "19th-century", "20th-century", "modern"]
-         }
-     ];
+    <div class="topBar">
+        <div class="statsPanel">
+            <div class="powerups">
 
-     const MODE_DEFS = [
-         {
-             id: "classic",
-             name: "Classic",
-             icon: "🏆",
-             desc: "5 lives, streak multiplier, endless flags."
-         },
-         {
-             id: "casual",
-             name: "Casual",
-             icon: "🌿",
-             desc: "No lives, no pressure. Just keep going."
-         },
-         {
-             id: "hard",
-             name: "Hard",
-             icon: "💀",
-             desc: "8 options instead of 4."
-         },
-         {
-             id: "daily",
-             name: "Daily Flag",
-             icon: "📅",
-             desc: "One flag everyone gets each day."
-         },
-         {
-             id: "twoPlayer",
-             name: "Two Player",
-             icon: "👥",
-             desc: "Pass and play with a friend."
-         }
-     ];
+    <div>
+        🎯 50/50:
+        <button onclick="useFiftyFifty()">
+            <span id="fiftyCount">0</span>
+        </button>
+    </div>
 
-     function buildModeSelector(){
-         const grid = document.getElementById("modeGrid");
-         const selected = loadMode();
-         grid.innerHTML = "";
-         MODE_DEFS.forEach(def => {
-             const card = document.createElement("button");
-             card.className = "modeCard" + (def.id === selected ? " selected" : "");
-             card.onclick = () => {
-                 saveMode(def.id);
-                 document.querySelectorAll(".modeCard").forEach(c => c.classList.remove("selected"));
-                 card.classList.add("selected");
-                 updateModeCount();
-                 closeModeModal();
-             };
-             const icon = document.createElement("span");
-             icon.className = "modeIcon";
-             icon.textContent = def.icon;
-             const name = document.createElement("span");
-             name.className = "modeName";
-             name.textContent = def.name;
-             const desc = document.createElement("span");
-             desc.className = "modeDesc";
-             desc.textContent = def.desc;
-             card.appendChild(icon);
-             card.appendChild(name);
-             card.appendChild(desc);
-             grid.appendChild(card);
-         });
-     }
 
-     function toggleModeModal(){
-         const modal = document.getElementById("modeModal");
-         modal.hidden = !modal.hidden;
-     }
+    <div>
+        ⏭ Skip:
+        <button onclick="useSkip()">
+            <span id="skipCount">0</span>
+        </button>
+    </div>
 
-     function closeModeModal(){
-         document.getElementById("modeModal").hidden = true;
-     }
 
-     function buildModifierSelector(){
-         const grid = document.getElementById("modifierGrid");
-         const active = loadModifiers();
-         grid.innerHTML = "";
-         MODIFIER_DEFS.forEach(def => {
-             const chip = document.createElement("button");
-             chip.className = "modifierChip" + (active.includes(def.id) ? " active" : "");
-             const icon = document.createElement("span");
-             icon.className = "modifierIcon";
-             icon.textContent = def.icon;
-             const name = document.createElement("span");
-             name.className = "modifierName";
-             name.textContent = def.name;
-             const mult = document.createElement("span");
-             mult.className = "modifierMult";
-             mult.textContent = "×" + def.multiplier;
-             chip.appendChild(icon);
-             chip.appendChild(name);
-             chip.appendChild(mult);
-             chip.onclick = () => {
-                 const list = loadModifiers();
-                 const idx = list.indexOf(def.id);
-                 if(idx > -1) list.splice(idx, 1);
-                 else list.push(def.id);
-                 saveModifiers(list);
-                 buildModifierSelector();
-                 updateModifierScore();
-             };
-             grid.appendChild(chip);
-         });
-     }
+    <div>
+        ✨ Double:
+        <button onclick="useDoubleScore()">
+            <span id="doubleCount">0</span>
+        </button>
+    </div>
 
-     function toggleModifierModal(){
-         const modal = document.getElementById("modifierModal");
-         modal.hidden = !modal.hidden;
-     }
 
-     function closeModifierModal(){
-         document.getElementById("modifierModal").hidden = true;
-     }
+    <progress
+        id="powerMeter"
+        value="0"
+        max="10">
+    </progress>
 
-     function updateModifierScore(){
-         const el = document.getElementById("modifierScore");
-         if(el) el.textContent = "×" + getModifierMultiplier();
-     }
+</div>
 
-     let questions = [];
+    <div>
+        🎯 Accuracy:
+        <span id="accuracy">0%</span>
+    </div>
 
-     function countFiltered(){
-         const excluded = loadExcludedTags();
-         return questions.filter(q => {
-             const tags = q.tags;
-             return tags.length === 0 || !tags.some(t => excluded.includes(t));
-         }).length;
-     }
 
-     loadQuestionsData()
-     .then(list => {
-         questions = list;
-         document.getElementById("questionCount").textContent = countFiltered();
-         buildTagModal();
-         buildModeSelector();
-         buildModifierSelector();
-         updateModifierScore();
-         updateModeCount();
-     })
-     .catch(() => {
-         document.getElementById("questionCount").textContent = "—";
-     });
+    <div>
+        ⏱ Average:
+        <span id="averageTime">0s</span>
+    </div>
 
-     function updateModeCount(){
-         const mode = loadMode();
-         const def = MODE_DEFS.find(d => d.id === mode);
-         const el = document.getElementById("modeCount");
-         if(el && def) el.textContent = def.icon + " " + def.name;
-     }
 
-     function buildTagModal(){
-         const body = document.getElementById("tagModalBody");
-         const excluded = loadExcludedTags();
-         body.innerHTML = "";
-         TAG_GROUPS.forEach(group => {
-             const section = document.createElement("div");
-             section.className = "tagGroup";
-             const title = document.createElement("div");
-             title.className = "tagGroupTitle";
-             title.textContent = group.name;
-             section.appendChild(title);
-             group.tags.forEach(tag => {
-                 const label = document.createElement("label");
-                 const cb = document.createElement("input");
-                 cb.type = "checkbox";
-                 cb.checked = !excluded.includes(tag);
-                 cb.addEventListener("change", () => {
-                     const list = loadExcludedTags();
-                     const idx = list.indexOf(tag);
-                     if(cb.checked && idx > -1) list.splice(idx, 1);
-                     if(!cb.checked && idx === -1) list.push(tag);
-                     saveExcludedTags(list);
-                     label.classList.toggle("checked", cb.checked);
-                     document.getElementById("questionCount").textContent = countFiltered();
-                 });
-                 label.appendChild(cb);
-                 label.appendChild(document.createTextNode(" " + tag));
-                 label.classList.toggle("checked", cb.checked);
-                 section.appendChild(label);
-             });
-             body.appendChild(section);
-         });
-     }
+    <div>
+        📊 Questions:
+        <span id="questionsSeen">0</span>
+    </div>
 
-     function toggleTagModal(){
-         const modal = document.getElementById("tagModal");
-         modal.hidden = !modal.hidden;
-     }
+</div>
 
-     function closeTagModal(){
-         document.getElementById("tagModal").hidden = true;
-     }
+        <div class="score">
+            🏆 Score:
+            <span id="score">0</span>
+        </div>
 
-     function resetTagFilters(){
-         saveExcludedTags([...DEFAULT_EXCLUDED_TAGS]);
-         buildTagModal();
-         document.getElementById("questionCount").textContent = countFiltered();
-     }
-    
+        <div class="streak">
+            🔥 Streak:
+            <span id="streak">0</span>
+        </div>
+
+        <div class="modeBadge" id="modeBadge"></div>
+
+        <button
+            class="endGameBtn hidden"
+            id="endGameBtn"
+            onclick="endGame()"
+        >
+            ⏹ End
+        </button>
+
+        <div class="lives">
+
+    <div class="heart" id="heart1">❤️</div>
+    <div class="heart" id="heart2">❤️</div>
+    <div class="heart" id="heart3">❤️</div>
+    <div class="heart" id="heart4">❤️</div>
+    <div class="heart" id="heart5">❤️</div>
+
+    </div>
+
+    </div>
+
+        <div
+            class="timerBar hidden"
+            id="timerBar"
+        >
+
+            <div
+                class="timerFill"
+                id="timerFill"
+            ></div>
+
+        </div>
+
+        <div class="flagCard">
+
+        <div
+            class="turnIndicator"
+            id="turnIndicator"
+        ></div>
+
+        <h2 id="question">
+            Loading question...
+        </h2>
+
+        <img
+            id="flagImage"
+            src=""
+            alt="Flag"
+            class="zoomable"
+        >
+
+        <div
+            class="answers"
+            id="answersContainer"
+        >
+
+            <button class="answer"></button>
+            <button class="answer"></button>
+            <button class="answer"></button>
+            <button class="answer"></button>
+            <button class="answer answerExtra"></button>
+            <button class="answer answerExtra"></button>
+            <button class="answer answerExtra"></button>
+            <button class="answer answerExtra"></button>
+
+        </div>
+
+    </div>
+
+    <div class="gameOver hidden" id="gameOver">
+
+        <h2 id="gameOverTitle">Game Over</h2>
+
+        <p>
+            Final Score:
+            <span id="finalScore">0</span>
+        </p>
+
+        <p>
+            Best Score:
+            <span id="bestScoreEnd">0</span>
+        </p>
+
+        <p>
+            Best Streak:
+            <span id="bestStreakEnd">0</span>
+        </p>
+
+        <br>
+
+        <p id="missedAnswer"></p>
+
+        <br>
+
+        <button
+            class="playAgain"
+            onclick="location.reload()"
+        >
+            Play Again
+        </button>
+
+        <br><br>
+
+        <button
+            class="playAgain"
+            onclick="location.href='index.html'"
+        >
+            Return to Lobby
+        </button>
+
+    </div>
+
+</div>
+
+<div class="zoomOverlay hidden" id="zoomOverlay">
+
+    <img id="zoomImage" src="" alt="Flag">
+
+</div>
+
+<script>
+const APP_VERSION = "4";
+try {
+    const v = localStorage.getItem("flagquiz.version");
+    if (v && v !== APP_VERSION) {
+        localStorage.setItem("flagquiz.version", APP_VERSION);
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.getRegistrations().then(regs =>
+                regs.forEach(reg => reg.unregister())
+            );
+        }
+        if (window.caches) {
+            caches.keys().then(names =>
+                Promise.all(names.map(n => caches.delete(n)))
+            );
+        }
+        location.reload();
+    } else if (!v) {
+        localStorage.setItem("flagquiz.version", APP_VERSION);
+    }
+} catch (e) {}
+if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("/sw.js");
+}
+</script>
+
+<script src="./data.js"></script>
+<script src="./modes.js"></script>
+<script src="./modifiers.js"></script>
+<script src="./questions.js"></script>
+<script src="./game.js"></script>
+<script src="./ui.js"></script>
+<script src="./stats.js"></script>
+<script src="./powerups.js"></script>
+<script src="./script.js"></script>
+
+</body>
+</html>
