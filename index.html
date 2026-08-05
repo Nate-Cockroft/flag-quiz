@@ -103,17 +103,64 @@
 
     </div>
 
-    <div class="modifierWrap">
+    <div class="modifierFilterWrap">
 
-        <div class="modifierHeader">
-
-            <span>Modifiers</span>
-
+        <button
+            class="tagButton"
+            id="modifierButton"
+            onclick="toggleModifierModal()"
+        >
+            ✨ Modifiers:
             <span id="modifierScore">×1.0</span>
+        </button>
+
+        <div
+            class="tagModal"
+            id="modifierModal"
+            hidden
+        >
+
+            <div class="tagModalCard">
+
+                <div class="tagModalHeader">
+
+                    <span>Select Modifiers</span>
+
+                    <button
+                        class="tagModalClose"
+                        onclick="closeModifierModal()"
+                    >
+                        ✕
+                    </button>
+
+                </div>
+
+                <div
+                    class="tagModalBody"
+                    id="modifierModalBody"
+                >
+
+                    <div
+                        class="modifierGrid"
+                        id="modifierGrid"
+                    ></div>
+
+                </div>
+
+                <div class="tagModalFooter">
+
+                    <button
+                        class="tagModalReset"
+                        onclick="closeModifierModal()"
+                    >
+                        Done
+                    </button>
+
+                </div>
+
+            </div>
 
         </div>
-
-        <div class="modifierGrid" id="modifierGrid"></div>
 
     </div>
 
@@ -320,6 +367,15 @@
              };
              grid.appendChild(chip);
          });
+     }
+
+     function toggleModifierModal(){
+         const modal = document.getElementById("modifierModal");
+         modal.hidden = !modal.hidden;
+     }
+
+     function closeModifierModal(){
+         document.getElementById("modifierModal").hidden = true;
      }
 
      function updateModifierScore(){
