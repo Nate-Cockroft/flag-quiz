@@ -7,6 +7,7 @@ const MODIFIER_KEY = "flagquiz.modifiers";
 
 const MODIFIERS = {
     reverse: "reverse",
+    wrongPick: "wrongPick",
     timeAttack: "timeAttack",
     oneLife: "oneLife",
     noPowerups: "noPowerups",
@@ -21,6 +22,13 @@ const MODIFIER_DEFS = [
         name: "Reverse",
         desc: "See the name, pick the flag.",
         multiplier: 1.0
+    },
+    {
+        id: "wrongPick",
+        icon: "❌",
+        name: "Wrong Pick",
+        desc: "See the name, tap the 3 wrong flags.",
+        multiplier: 1.25
     },
     {
         id: "timeAttack",
@@ -93,6 +101,11 @@ function getModifierMultiplier() {
 function isReverseActive() {
     return (
         game.mode === MODES.reverse ||
-        hasModifier(MODIFIERS.reverse)
+        hasModifier(MODIFIERS.reverse) ||
+        hasModifier(MODIFIERS.wrongPick)
     );
+}
+
+function isWrongPickActive() {
+    return hasModifier(MODIFIERS.wrongPick);
 }

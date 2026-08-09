@@ -477,6 +477,20 @@ body{
 
 
 
+.answer.picked{
+
+    opacity:.4;
+
+    filter:grayscale(1);
+
+    cursor:default;
+
+    transform:scale(.97);
+
+}
+
+
+
 .answerExtra{
 
     display:none;

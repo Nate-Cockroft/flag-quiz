@@ -155,6 +155,8 @@ function displayQuestion(question){
 
     if(!question) return;
 
+    game.wrongPicks = 0;
+
     const questionText =
         document.getElementById("question");
 
@@ -267,10 +269,19 @@ function displayQuestion(question){
 
                 button.onclick=()=>{
 
-                    answerQuestion(
-                        answers[index].correct,
-                        button
-                    );
+                    if(isWrongPickActive()){
+                        handleWrongPickClick(
+                            answers,
+                            index,
+                            button
+                        );
+                    }
+                    else{
+                        answerQuestion(
+                            answers[index].correct,
+                            button
+                        );
+                    }
 
                 };
 
@@ -377,6 +388,27 @@ function answerQuestion(correct,button){
 }
 
 
+
+
+function handleWrongPickClick(answers, index, button){
+    if(answers[index].correct){
+        answerQuestion(false, button);
+        return;
+    }
+    button.classList.add("picked");
+    button.disabled = true;
+    game.wrongPicks++;
+    let remainingWrong = 0;
+    document.querySelectorAll('.answer[data-correct="false"]').forEach(btn => {
+        if(!btn.classList.contains("picked") && btn.style.visibility !== "hidden"){
+            remainingWrong++;
+        }
+    });
+    if(remainingWrong === 0){
+        const correctButton = document.querySelector('.answer[data-correct="true"]');
+        answerQuestion(true, correctButton);
+    }
+}
 
 
 function correctAnswer(button){
