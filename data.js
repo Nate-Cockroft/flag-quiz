@@ -3,7 +3,7 @@
 // Shared question loader with session cache
 // ========================================
 
-const QUESTIONS_CACHE_KEY = "flagquiz.questions.v4";
+const QUESTIONS_CACHE_KEY = "flagquiz.questions.v5";
 const CSV_URL = "questions.csv";
 const EXCLUDED_KEY = "excludedTags";
 const DEFAULT_EXCLUDED_TAGS = ["border"];
