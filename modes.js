@@ -71,14 +71,11 @@ function getDailyQuestion(pool) {
 }
 
 // Builds 8 options for hard mode: the original 4 plus 4 random
-// distractor names pulled from the rest of the pool. Colour questions
-// stay self-contained so colour names never mix with country names.
+// distractor names pulled from the rest of the pool.
 function buildHardAnswers(question) {
-    const isColourQuestion = question.tags.includes("colour");
     const taken = new Set(question.answers.map(a => a.toLowerCase()));
     const candidates = [];
     game.questions.forEach(q => {
-        if (q.tags.includes("colour") !== isColourQuestion) return;
         q.answers.forEach(a => {
             const key = a.toLowerCase();
             if (!taken.has(key)) {
