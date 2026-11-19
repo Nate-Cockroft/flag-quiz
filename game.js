@@ -184,6 +184,20 @@ function displayQuestion(question){
     const isReverse =
         isReverseActive();
 
+    const answersContainer =
+        document.getElementById("answersContainer");
+
+    // Reveal Hard mode's extra buttons before populating them. This avoids
+    // Reverse mode depending on a later UI refresh to expose choices 5–8.
+    if(answersContainer){
+
+        answersContainer.classList.toggle(
+            "answersHard",
+            game.mode === MODES.hard
+        );
+
+    }
+
     let answers =
         question.answers.map(
             (answer,index)=>{

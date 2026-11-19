@@ -103,7 +103,9 @@ function buildReverseQuestion(question) {
     const others = game.questions.filter(q => q !== question);
     shuffleArray(others);
     const images = [question.image];
-    const answerCount = question.answers.length;
+    // Hard mode always needs eight flag choices. Using the selected mode
+    // directly keeps this correct even if another modifier rebuilt answers.
+    const answerCount = game.mode === MODES.hard ? 8 : question.answers.length;
     others.slice(0, answerCount - 1).forEach(q => images.push(q.image));
     shuffleArray(images);
     return {
