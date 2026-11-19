@@ -1240,6 +1240,24 @@ body{
 
 
 
+.tagCount{
+
+    color:#888;
+
+    font-variant-numeric:tabular-nums;
+
+}
+
+
+
+.tagGroup label.checked .tagCount{
+
+    color:#6c6;
+
+}
+
+
+
 .tagModalFooter{
 
     padding:12px 18px 16px;

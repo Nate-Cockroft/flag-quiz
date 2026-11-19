@@ -97,12 +97,14 @@ function buildHardAnswers(question) {
 }
 
 // Builds a reverse question: the answer name is shown as the question,
-// and the 4 buttons become flag images from the pool.
+// and the buttons become flag images from the pool. Preserve the current
+// answer count so Hard + Reverse presents eight flags, rather than four.
 function buildReverseQuestion(question) {
     const others = game.questions.filter(q => q !== question);
     shuffleArray(others);
     const images = [question.image];
-    others.slice(0, 3).forEach(q => images.push(q.image));
+    const answerCount = question.answers.length;
+    others.slice(0, answerCount - 1).forEach(q => images.push(q.image));
     shuffleArray(images);
     return {
         question: question.answers[question.correct],

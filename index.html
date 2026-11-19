@@ -454,8 +454,14 @@
                      label.classList.toggle("checked", cb.checked);
                      document.getElementById("questionCount").textContent = countFiltered();
                  });
+                 const count = document.createElement("span");
+                 count.className = "tagCount";
+                 const matchingQuestions = questions.filter(q => q.tags.includes(tag)).length;
+                 count.textContent = "(" + matchingQuestions + ")";
+                 count.setAttribute("aria-label", matchingQuestions + " flags");
                  label.appendChild(cb);
-                 label.appendChild(document.createTextNode(" " + tag));
+                 label.appendChild(document.createTextNode(" " + tag + " "));
+                 label.appendChild(count);
                  label.classList.toggle("checked", cb.checked);
                  section.appendChild(label);
              });
