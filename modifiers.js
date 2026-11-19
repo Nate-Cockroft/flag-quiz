@@ -15,6 +15,7 @@ const MODIFIERS = {
     noDoubleScore: "noDoubleScore",
     zoomedIn: "zoomedIn",
     blurredFlag: "blurredFlag",
+    grayerFlag: "grayerFlag",
     speedBonus: "speedBonus",
     noMercy: "noMercy"
 };
@@ -80,8 +81,15 @@ const MODIFIER_DEFS = [
         id: "blurredFlag",
         icon: "🌫️",
         name: "Blurred Flag",
-        desc: "Identify a flag with a stronger blur.",
+        desc: "Identify a flag with a blur.",
         multiplier: 1.15
+    },
+    {
+        id: "grayerFlag",
+        icon: "◻️",
+        name: "Washed Out",
+        desc: "Identify a flag with muted colours.",
+        multiplier: 1.1
     },
     {
         id: "speedBonus",

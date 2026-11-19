@@ -384,9 +384,21 @@ body{
 
 }
 
+.flagGrayer{
+
+    filter:grayscale(.45) saturate(.65);
+
+}
+
+.flagBlurred.flagGrayer{
+
+    filter:blur(3px) grayscale(.45) saturate(.65);
+
+}
+
 .answerFlagZoomed{
 
-    transform:scale(2.5);
+    transform:scale(3);
 
     transform-origin:var(--zoom-x, 50%) var(--zoom-y, 50%);
 

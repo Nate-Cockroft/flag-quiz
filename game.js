@@ -171,7 +171,7 @@ function displayQuestion(question){
         image.style.display =
             "none";
 
-        image.classList.remove("flagZoomed", "flagBlurred");
+        image.classList.remove("flagZoomed", "flagBlurred", "flagGrayer");
 
     }
     else{
@@ -189,6 +189,11 @@ function displayQuestion(question){
         image.classList.toggle(
             "flagBlurred",
             hasModifier(MODIFIERS.blurredFlag)
+        );
+
+        image.classList.toggle(
+            "flagGrayer",
+            hasModifier(MODIFIERS.grayerFlag)
         );
 
         if(hasModifier(MODIFIERS.zoomedIn)){
@@ -286,6 +291,11 @@ function displayQuestion(question){
                     img.classList.toggle(
                         "flagBlurred",
                         hasModifier(MODIFIERS.blurredFlag)
+                    );
+
+                    img.classList.toggle(
+                        "flagGrayer",
+                        hasModifier(MODIFIERS.grayerFlag)
                     );
 
                     if(hasModifier(MODIFIERS.zoomedIn)){
