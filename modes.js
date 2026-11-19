@@ -100,6 +100,10 @@ function buildHardAnswers(question) {
 // and the buttons become flag images from the pool. Preserve the current
 // answer count so Hard + Reverse presents eight flags, rather than four.
 function buildReverseQuestion(question) {
+    if(question.isDoubleTrouble){
+        return buildDoubleTroubleReverseQuestion(question);
+    }
+
     const others = game.questions.filter(q => q !== question);
     shuffleArray(others);
     const images = [question.image];
@@ -115,6 +119,59 @@ function buildReverseQuestion(question) {
         correct: images.indexOf(question.image),
         tags: question.tags,
         answerText: question.answers[question.correct]
+    };
+}
+
+// Builds a two-flag question with country-pair answers. Hard mode expands
+// the choices to eight pairs, matching its usual answer count.
+function buildDoubleTroubleQuestion(firstQuestion) {
+    const pool = game.questions.filter(q => q !== firstQuestion);
+    shuffleArray(pool);
+
+    const secondQuestion = pool.shift();
+    if(!secondQuestion) return firstQuestion;
+
+    const firstName = firstQuestion.answers[firstQuestion.correct];
+    const secondName = secondQuestion.answers[secondQuestion.correct];
+    const correctPair = firstName + " + " + secondName;
+    const answerCount = game.mode === MODES.hard ? 8 : 4;
+    const pairs = [{
+        text: correctPair,
+        images: [firstQuestion.image, secondQuestion.image]
+    }];
+
+    for(let i = 0; pairs.length < answerCount && i + 1 < pool.length; i += 2){
+        const left = pool[i];
+        const right = pool[i + 1];
+        const text = left.answers[left.correct] + " + " + right.answers[right.correct];
+        if(!pairs.some(pair => pair.text === text)){
+            pairs.push({ text, images: [left.image, right.image] });
+        }
+    }
+
+    shuffleArray(pairs);
+    return {
+        question: "Which two flags are shown?",
+        images: [firstQuestion.image, secondQuestion.image],
+        answers: pairs.map(pair => pair.text),
+        answerImages: pairs.map(pair => pair.images),
+        correct: pairs.findIndex(pair => pair.text === correctPair),
+        tags: [...firstQuestion.tags, ...secondQuestion.tags],
+        answerText: correctPair,
+        isDoubleTrouble: true
+    };
+}
+
+function buildDoubleTroubleReverseQuestion(question) {
+    return {
+        question: question.answers[question.correct],
+        image: null,
+        answers: question.answerImages,
+        correct: question.correct,
+        tags: question.tags,
+        answerText: question.answerText,
+        isDoubleTrouble: true,
+        isReverseDoubleTrouble: true
     };
 }
 

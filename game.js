@@ -113,6 +113,15 @@ function nextQuestion(){
         Date.now();
 
     if(
+        isDoubleTroubleActive() &&
+        game.currentQuestion
+    ){
+
+        game.currentQuestion =
+            buildDoubleTroubleQuestion(game.currentQuestion);
+
+    }
+    else if(
         game.mode === MODES.hard &&
         game.currentQuestion
     ){
@@ -163,6 +172,12 @@ function displayQuestion(question){
     const image =
         document.getElementById("flagImage");
 
+    const secondaryImage =
+        document.getElementById("flagImageSecondary");
+
+    const flagImages =
+        document.getElementById("flagImages");
+
     questionText.textContent =
         question.question;
 
@@ -173,33 +188,28 @@ function displayQuestion(question){
 
         image.classList.remove("flagZoomed", "flagBlurred", "flagGrayer");
 
+        if(secondaryImage) secondaryImage.style.display = "none";
+        if(flagImages) flagImages.classList.remove("doubleTroubleFlags");
+
     }
     else{
 
         image.style.display = "";
 
         image.src =
-            question.image;
+            question.images ? question.images[0] : question.image;
 
-        image.classList.toggle(
-            "flagZoomed",
-            hasModifier(MODIFIERS.zoomedIn)
-        );
+        applyFlagVisualModifiers(image);
 
-        image.classList.toggle(
-            "flagBlurred",
-            hasModifier(MODIFIERS.blurredFlag)
-        );
+        const isDoubleTrouble = Boolean(question.isDoubleTrouble);
+        if(flagImages) flagImages.classList.toggle("doubleTroubleFlags", isDoubleTrouble);
 
-        image.classList.toggle(
-            "flagGrayer",
-            hasModifier(MODIFIERS.grayerFlag)
-        );
-
-        if(hasModifier(MODIFIERS.zoomedIn)){
-            const randomPosition = () => 15 + Math.floor(Math.random() * 71);
-            image.style.setProperty("--zoom-x", randomPosition() + "%");
-            image.style.setProperty("--zoom-y", randomPosition() + "%");
+        if(secondaryImage){
+            secondaryImage.style.display = isDoubleTrouble ? "" : "none";
+            if(isDoubleTrouble){
+                secondaryImage.src = question.images[1];
+                applyFlagVisualModifiers(secondaryImage);
+            }
         }
 
     }
@@ -273,49 +283,33 @@ function displayQuestion(question){
                 if(isReverse){
 
                     button.innerHTML = "";
+                    const sources = Array.isArray(answers[index].text)
+                        ? answers[index].text
+                        : [answers[index].text];
+                    const pair = sources.length > 1;
+                    const imageWrap = pair ? document.createElement("span") : button;
 
-                    const img =
-                        document.createElement("img");
+                    if(pair) imageWrap.className = "answerFlagPair";
 
-                    img.src = answers[index].text;
+                    sources.forEach(source => {
+                        const img = document.createElement("img");
+                        img.src = source;
+                        img.className = "answerFlag";
+                        img.alt = "Flag";
+                        img.classList.toggle("answerFlagZoomed", hasModifier(MODIFIERS.zoomedIn));
+                        img.classList.toggle("flagBlurred", hasModifier(MODIFIERS.blurredFlag));
+                        img.classList.toggle("flagGrayer", hasModifier(MODIFIERS.grayerFlag));
 
-                    img.className = "answerFlag";
-
-                    img.alt = "Flag";
-
-                    img.classList.toggle(
-                        "answerFlagZoomed",
-                        hasModifier(MODIFIERS.zoomedIn)
-                    );
-
-                    img.classList.toggle(
-                        "flagBlurred",
-                        hasModifier(MODIFIERS.blurredFlag)
-                    );
-
-                    img.classList.toggle(
-                        "flagGrayer",
-                        hasModifier(MODIFIERS.grayerFlag)
-                    );
-
-                    if(hasModifier(MODIFIERS.zoomedIn)){
-                        const randomPosition = () => 15 + Math.floor(Math.random() * 71);
-                        img.style.setProperty("--zoom-x", randomPosition() + "%");
-                        img.style.setProperty("--zoom-y", randomPosition() + "%");
-                    }
-
-                    img.addEventListener(
-                        "click",
-                        (event)=>{
-
-                            event.stopPropagation();
-
-                            openZoom(img);
-
+                        if(hasModifier(MODIFIERS.zoomedIn)){
+                            const randomPosition = () => 15 + Math.floor(Math.random() * 71);
+                            img.style.setProperty("--zoom-x", randomPosition() + "%");
+                            img.style.setProperty("--zoom-y", randomPosition() + "%");
                         }
-                    );
 
-                    button.appendChild(img);
+                        imageWrap.appendChild(img);
+                    });
+
+                    if(pair) button.appendChild(imageWrap);
 
                 }
                 else{
@@ -356,6 +350,18 @@ function displayQuestion(question){
         }
     );
 
+}
+
+function applyFlagVisualModifiers(image){
+    image.classList.toggle("flagZoomed", hasModifier(MODIFIERS.zoomedIn));
+    image.classList.toggle("flagBlurred", hasModifier(MODIFIERS.blurredFlag));
+    image.classList.toggle("flagGrayer", hasModifier(MODIFIERS.grayerFlag));
+
+    if(hasModifier(MODIFIERS.zoomedIn)){
+        const randomPosition = () => 15 + Math.floor(Math.random() * 71);
+        image.style.setProperty("--zoom-x", randomPosition() + "%");
+        image.style.setProperty("--zoom-y", randomPosition() + "%");
+    }
 }
 
 

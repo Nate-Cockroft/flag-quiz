@@ -16,6 +16,7 @@ const MODIFIERS = {
     zoomedIn: "zoomedIn",
     blurredFlag: "blurredFlag",
     grayerFlag: "grayerFlag",
+    doubleTrouble: "doubleTrouble",
     speedBonus: "speedBonus",
     noMercy: "noMercy"
 };
@@ -92,6 +93,13 @@ const MODIFIER_DEFS = [
         multiplier: 1.1
     },
     {
+        id: "doubleTrouble",
+        icon: "👯",
+        name: "Double Trouble",
+        desc: "See two flags and identify the country pair.",
+        multiplier: 1.5
+    },
+    {
         id: "speedBonus",
         icon: "⚡",
         name: "Speed Bonus",
@@ -145,6 +153,11 @@ function isReverseActive() {
         hasModifier(MODIFIERS.wrongPick)
     );
 }
+
+function isDoubleTroubleActive() {
+    return hasModifier(MODIFIERS.doubleTrouble);
+}
+
 
 function isWrongPickActive() {
     return hasModifier(MODIFIERS.wrongPick);

@@ -707,32 +707,16 @@ function closeZoom(){
 
 function setupZoomTriggers(){
 
+    ["flagImage", "flagImageSecondary"].forEach(id => {
+        const flagImage = document.getElementById(id);
 
-    const flagImage =
-        document.getElementById(
-            "flagImage"
-        );
-
-    if(flagImage){
-
-        flagImage.addEventListener(
-            "click",
-            () => {
-
-                if(flagImage.src){
-
-                    openZoom(flagImage);
-
-                }
-
-            }
-        );
-
-        flagImage.classList.add(
-            "zoomable"
-        );
-
-    }
+        if(flagImage){
+            flagImage.addEventListener("click", () => {
+                if(flagImage.src) openZoom(flagImage);
+            });
+            flagImage.classList.add("zoomable");
+        }
+    });
 
 
     const overlay =

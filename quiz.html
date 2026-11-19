@@ -123,12 +123,20 @@
             Loading question...
         </h2>
 
-        <img
-            id="flagImage"
-            src=""
-            alt="Flag"
-            class="zoomable"
-        >
+        <div class="flagImages" id="flagImages">
+            <img
+                id="flagImage"
+                src=""
+                alt="Flag"
+                class="zoomable"
+            >
+            <img
+                id="flagImageSecondary"
+                src=""
+                alt="Second flag"
+                class="zoomable"
+            >
+        </div>
 
         <div
             class="answers"
@@ -200,7 +208,7 @@
 </div>
 
 <script>
-const APP_VERSION = "14";
+const APP_VERSION = "15";
 try {
     const v = localStorage.getItem("flagquiz.version");
     if (v && v !== APP_VERSION) {
