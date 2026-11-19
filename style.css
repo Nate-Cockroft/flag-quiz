@@ -368,7 +368,7 @@ body{
 
 }
 
-.flagZoomed{
+#flagImage.flagZoomed{
 
     height:250px;
 
@@ -380,7 +380,15 @@ body{
 
 .flagBlurred{
 
-    filter:blur(1.5px);
+    filter:blur(3px);
+
+}
+
+.answerFlagZoomed{
+
+    transform:scale(2.5);
+
+    transform-origin:var(--zoom-x, 50%) var(--zoom-y, 50%);
 
 }
 
@@ -462,6 +470,8 @@ body{
     padding:12px;
 
     cursor:pointer;
+
+    overflow:hidden;
 
     transition:.15s;
 

@@ -80,7 +80,7 @@ const MODIFIER_DEFS = [
         id: "blurredFlag",
         icon: "🌫️",
         name: "Blurred Flag",
-        desc: "Identify a flag with a light blur.",
+        desc: "Identify a flag with a stronger blur.",
         multiplier: 1.15
     },
     {
@@ -149,13 +149,4 @@ function isPowerupDisabled(powerup) {
         doubleScore: MODIFIERS.noDoubleScore
     };
     return hasModifier(modifierByPowerup[powerup]);
-}
-
-function getModifierConflicts(id) {
-    const reverseModifiers = [MODIFIERS.reverse, MODIFIERS.wrongPick];
-    const visualFlagModifiers = [MODIFIERS.zoomedIn, MODIFIERS.blurredFlag];
-
-    if (visualFlagModifiers.includes(id)) return reverseModifiers;
-    if (reverseModifiers.includes(id)) return visualFlagModifiers;
-    return [];
 }

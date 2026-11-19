@@ -375,13 +375,7 @@
                  const list = loadModifiers();
                  const idx = list.indexOf(def.id);
                  if(idx > -1) list.splice(idx, 1);
-                 else {
-                     getModifierConflicts(def.id).forEach(conflict => {
-                         const conflictIdx = list.indexOf(conflict);
-                         if(conflictIdx > -1) list.splice(conflictIdx, 1);
-                     });
-                     list.push(def.id);
-                 }
+                 else list.push(def.id);
                  saveModifiers(list);
                  buildModifierSelector();
                  updateModifierScore();

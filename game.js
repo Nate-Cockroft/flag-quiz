@@ -278,6 +278,22 @@ function displayQuestion(question){
 
                     img.alt = "Flag";
 
+                    img.classList.toggle(
+                        "answerFlagZoomed",
+                        hasModifier(MODIFIERS.zoomedIn)
+                    );
+
+                    img.classList.toggle(
+                        "flagBlurred",
+                        hasModifier(MODIFIERS.blurredFlag)
+                    );
+
+                    if(hasModifier(MODIFIERS.zoomedIn)){
+                        const randomPosition = () => 15 + Math.floor(Math.random() * 71);
+                        img.style.setProperty("--zoom-x", randomPosition() + "%");
+                        img.style.setProperty("--zoom-y", randomPosition() + "%");
+                    }
+
                     img.addEventListener(
                         "click",
                         (event)=>{
