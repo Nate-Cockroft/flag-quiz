@@ -10,7 +10,11 @@ const MODIFIERS = {
     wrongPick: "wrongPick",
     timeAttack: "timeAttack",
     oneLife: "oneLife",
-    noPowerups: "noPowerups",
+    noFiftyFifty: "noFiftyFifty",
+    noSkip: "noSkip",
+    noDoubleScore: "noDoubleScore",
+    zoomedIn: "zoomedIn",
+    blurredFlag: "blurredFlag",
     speedBonus: "speedBonus",
     noMercy: "noMercy"
 };
@@ -45,11 +49,39 @@ const MODIFIER_DEFS = [
         multiplier: 2
     },
     {
-        id: "noPowerups",
+        id: "noFiftyFifty",
         icon: "🚫",
-        name: "No Powerups",
-        desc: "Powerups are disabled.",
+        name: "No 50/50",
+        desc: "50/50 powerups are unavailable.",
+        multiplier: 1.05
+    },
+    {
+        id: "noSkip",
+        icon: "🚫",
+        name: "No Skip",
+        desc: "Skip powerups are unavailable.",
+        multiplier: 1.05
+    },
+    {
+        id: "noDoubleScore",
+        icon: "🚫",
+        name: "No Double Score",
+        desc: "Double Score powerups are unavailable.",
+        multiplier: 1.05
+    },
+    {
+        id: "zoomedIn",
+        icon: "🔍",
+        name: "Zoomed In",
+        desc: "Identify a randomly cropped part of the flag.",
         multiplier: 1.25
+    },
+    {
+        id: "blurredFlag",
+        icon: "🌫️",
+        name: "Blurred Flag",
+        desc: "Identify a flag with a light blur.",
+        multiplier: 1.15
     },
     {
         id: "speedBonus",
@@ -108,4 +140,22 @@ function isReverseActive() {
 
 function isWrongPickActive() {
     return hasModifier(MODIFIERS.wrongPick);
+}
+
+function isPowerupDisabled(powerup) {
+    const modifierByPowerup = {
+        fiftyFifty: MODIFIERS.noFiftyFifty,
+        skip: MODIFIERS.noSkip,
+        doubleScore: MODIFIERS.noDoubleScore
+    };
+    return hasModifier(modifierByPowerup[powerup]);
+}
+
+function getModifierConflicts(id) {
+    const reverseModifiers = [MODIFIERS.reverse, MODIFIERS.wrongPick];
+    const visualFlagModifiers = [MODIFIERS.zoomedIn, MODIFIERS.blurredFlag];
+
+    if (visualFlagModifiers.includes(id)) return reverseModifiers;
+    if (reverseModifiers.includes(id)) return visualFlagModifiers;
+    return [];
 }

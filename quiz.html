@@ -17,7 +17,7 @@
         <div class="statsPanel">
             <div class="powerups">
 
-    <div>
+    <div id="fiftyPowerup">
         🎯 50/50:
         <button onclick="useFiftyFifty()">
             <span id="fiftyCount">0</span>
@@ -25,7 +25,7 @@
     </div>
 
 
-    <div>
+    <div id="skipPowerup">
         ⏭ Skip:
         <button onclick="useSkip()">
             <span id="skipCount">0</span>
@@ -33,7 +33,7 @@
     </div>
 
 
-    <div>
+    <div id="doublePowerup">
         ✨ Double:
         <button onclick="useDoubleScore()">
             <span id="doubleCount">0</span>
@@ -200,7 +200,7 @@
 </div>
 
 <script>
-const APP_VERSION = "11";
+const APP_VERSION = "12";
 try {
     const v = localStorage.getItem("flagquiz.version");
     if (v && v !== APP_VERSION) {

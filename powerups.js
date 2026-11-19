@@ -21,8 +21,7 @@ const powerupSystem = {
 
 function increasePowerupMeter(){
 
-
-    if(hasModifier(MODIFIERS.noPowerups)) return;
+    if(getAvailablePowerups().length === 0) return;
 
     powerupSystem.meter++;
 
@@ -52,16 +51,9 @@ function increasePowerupMeter(){
 
 function giveRandomPowerup(){
 
+    const rewards = getAvailablePowerups();
 
-    const rewards = [
-
-        "fiftyFifty",
-
-        "skip",
-
-        "doubleScore"
-
-    ];
+    if(rewards.length === 0) return;
 
 
 
@@ -97,8 +89,7 @@ function giveRandomPowerup(){
 
 function useFiftyFifty(){
 
-
-    if(hasModifier(MODIFIERS.noPowerups)) return;
+    if(isPowerupDisabled("fiftyFifty")) return;
 
     if(game.powerups.fiftyFifty <= 0){
 
@@ -155,8 +146,7 @@ function useFiftyFifty(){
 
 function useSkip(){
 
-
-    if(hasModifier(MODIFIERS.noPowerups)) return;
+    if(isPowerupDisabled("skip")) return;
 
     if(game.powerups.skip <= 0){
 
@@ -184,8 +174,7 @@ function useSkip(){
 
 function useDoubleScore(){
 
-
-    if(hasModifier(MODIFIERS.noPowerups)) return;
+    if(isPowerupDisabled("doubleScore")) return;
 
     if(game.powerups.doubleScore <= 0){
 
@@ -264,14 +253,25 @@ function updatePowerupUI(){
             ".powerups"
         );
 
+    const availablePowerups = getAvailablePowerups();
+
     if(powerupsEl){
 
         powerupsEl.style.display =
-            hasModifier(MODIFIERS.noPowerups)
+            availablePowerups.length === 0
                 ? "none"
                 : "";
 
     }
+
+    [
+        ["fiftyPowerup", "fiftyFifty"],
+        ["skipPowerup", "skip"],
+        ["doublePowerup", "doubleScore"]
+    ].forEach(([elementId, powerup]) => {
+        const element = document.getElementById(elementId);
+        if(element) element.hidden = isPowerupDisabled(powerup);
+    });
 
 
 
@@ -298,6 +298,12 @@ function updatePowerupUI(){
             powerupSystem.meter;
 
 
+}
+
+function getAvailablePowerups(){
+    return ["fiftyFifty", "skip", "doubleScore"].filter(
+        powerup => !isPowerupDisabled(powerup)
+    );
 }
 
 

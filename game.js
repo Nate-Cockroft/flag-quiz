@@ -171,6 +171,8 @@ function displayQuestion(question){
         image.style.display =
             "none";
 
+        image.classList.remove("flagZoomed", "flagBlurred");
+
     }
     else{
 
@@ -178,6 +180,22 @@ function displayQuestion(question){
 
         image.src =
             question.image;
+
+        image.classList.toggle(
+            "flagZoomed",
+            hasModifier(MODIFIERS.zoomedIn)
+        );
+
+        image.classList.toggle(
+            "flagBlurred",
+            hasModifier(MODIFIERS.blurredFlag)
+        );
+
+        if(hasModifier(MODIFIERS.zoomedIn)){
+            const randomPosition = () => 15 + Math.floor(Math.random() * 71);
+            image.style.setProperty("--zoom-x", randomPosition() + "%");
+            image.style.setProperty("--zoom-y", randomPosition() + "%");
+        }
 
     }
 

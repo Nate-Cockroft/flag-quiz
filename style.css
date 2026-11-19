@@ -368,6 +368,22 @@ body{
 
 }
 
+.flagZoomed{
+
+    height:250px;
+
+    object-fit:cover !important;
+
+    object-position:var(--zoom-x, 50%) var(--zoom-y, 50%);
+
+}
+
+.flagBlurred{
+
+    filter:blur(1.5px);
+
+}
+
 
 
 .timerBar{
