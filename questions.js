@@ -83,3 +83,17 @@ function getNextQuestion(){
     return game.remainingQuestions.pop();
 
 }
+
+function getNextQuizQuestion(){
+    if(!isCapitalQuestionsActive()) return getNextQuestion();
+
+    const capitalQuestions = game.questions.filter(question =>
+        Object.prototype.hasOwnProperty.call(CAPITALS, question.answers[question.correct])
+    );
+
+    if(capitalQuestions.length === 0){
+        throw new Error("No capital questions match your selected filters");
+    }
+
+    return capitalQuestions[Math.floor(Math.random() * capitalQuestions.length)];
+}

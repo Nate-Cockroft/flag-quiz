@@ -105,7 +105,7 @@ function nextQuestion(){
     }
 
     game.currentQuestion =
-        getNextQuestion();
+        getNextQuizQuestion();
 
     game.questionsSeen++;
 
@@ -113,6 +113,15 @@ function nextQuestion(){
         Date.now();
 
     if(
+        isCapitalQuestionsActive() &&
+        game.currentQuestion
+    ){
+
+        game.currentQuestion =
+            buildCapitalQuestion(game.currentQuestion);
+
+    }
+    else if(
         isDoubleTroubleActive() &&
         game.currentQuestion
     ){
@@ -139,7 +148,8 @@ function nextQuestion(){
 
     if(
         isReverseActive() &&
-        game.currentQuestion
+        game.currentQuestion &&
+        !game.currentQuestion.isCapitalQuestion
     ){
 
         game.currentQuestion =
@@ -181,7 +191,9 @@ function displayQuestion(question){
     questionText.textContent =
         question.question;
 
-    if(isReverseActive()){
+    const isCapitalQuestion = Boolean(question.isCapitalQuestion);
+
+    if(isReverseActive() && !isCapitalQuestion){
 
         image.style.display =
             "none";
@@ -194,7 +206,7 @@ function displayQuestion(question){
     }
     else{
 
-        image.style.display = "";
+        image.style.display = isCapitalQuestion && !question.showFlag ? "none" : "";
 
         image.src =
             question.images ? question.images[0] : question.image;
@@ -215,7 +227,7 @@ function displayQuestion(question){
     }
 
     const isReverse =
-        isReverseActive();
+        isReverseActive() && !isCapitalQuestion;
 
     const answersContainer =
         document.getElementById("answersContainer");

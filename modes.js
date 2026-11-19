@@ -175,6 +175,33 @@ function buildDoubleTroubleReverseQuestion(question) {
     };
 }
 
+function buildCapitalQuestion(question) {
+    const country = question.answers[question.correct];
+    const capital = CAPITALS[country];
+    if(!capital) return question;
+
+    const candidates = Object.values(CAPITALS)
+        .filter(value => value !== capital);
+    shuffleArray(candidates);
+
+    const answerCount = game.mode === MODES.hard ? 8 : 4;
+    const answers = [capital, ...candidates.slice(0, answerCount - 1)];
+    shuffleArray(answers);
+
+    return {
+        question: isReverseActive()
+            ? "What is this country's capital?"
+            : "What is the capital of " + country + "?",
+        image: question.image,
+        answers,
+        correct: answers.indexOf(capital),
+        tags: question.tags,
+        answerText: capital,
+        isCapitalQuestion: true,
+        showFlag: isReverseActive()
+    };
+}
+
 // One flag image per answer name, used to show the correct flag
 // on the reverse-mode game-over screen.
 function buildAnswerImageMap(questions) {

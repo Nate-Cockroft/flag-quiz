@@ -227,7 +227,7 @@
 </div>
 
     <script>
-     const APP_VERSION = "15";
+     const APP_VERSION = "16";
      try {
          const v = localStorage.getItem("flagquiz.version");
          if (v && v !== APP_VERSION) {
@@ -375,7 +375,13 @@
                  const list = loadModifiers();
                  const idx = list.indexOf(def.id);
                  if(idx > -1) list.splice(idx, 1);
-                 else list.push(def.id);
+                 else {
+                     getModifierConflicts(def.id).forEach(conflict => {
+                         const conflictIdx = list.indexOf(conflict);
+                         if(conflictIdx > -1) list.splice(conflictIdx, 1);
+                     });
+                     list.push(def.id);
+                 }
                  saveModifiers(list);
                  buildModifierSelector();
                  updateModifierScore();

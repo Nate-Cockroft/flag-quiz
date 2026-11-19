@@ -17,6 +17,7 @@ const MODIFIERS = {
     blurredFlag: "blurredFlag",
     grayerFlag: "grayerFlag",
     doubleTrouble: "doubleTrouble",
+    capitalQuestions: "capitalQuestions",
     speedBonus: "speedBonus",
     noMercy: "noMercy"
 };
@@ -100,6 +101,13 @@ const MODIFIER_DEFS = [
         multiplier: 1.5
     },
     {
+        id: "capitalQuestions",
+        icon: "🏛️",
+        name: "Capital Questions",
+        desc: "Identify the capital of a modern country.",
+        multiplier: 1.25
+    },
+    {
         id: "speedBonus",
         icon: "⚡",
         name: "Speed Bonus",
@@ -156,6 +164,16 @@ function isReverseActive() {
 
 function isDoubleTroubleActive() {
     return hasModifier(MODIFIERS.doubleTrouble);
+}
+
+function isCapitalQuestionsActive() {
+    return hasModifier(MODIFIERS.capitalQuestions);
+}
+
+function getModifierConflicts(id) {
+    if(id === MODIFIERS.capitalQuestions) return [MODIFIERS.doubleTrouble];
+    if(id === MODIFIERS.doubleTrouble) return [MODIFIERS.capitalQuestions];
+    return [];
 }
 
 
